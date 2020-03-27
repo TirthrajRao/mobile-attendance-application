@@ -1,0 +1,17 @@
+<ion-content padding center text-center>
+  <h1><img src="assets/icon/raoinfotech-logo-small.png"><br><p>Attendence</p></h1>
+  <form [formGroup]='loginForm' class="md">
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      <ion-item>
+        <ion-label item-label item-label-floating position="floating">E-mail<ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required type="text" formControlName="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label item-label item-label-floating position="floating">Password<ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required type="text" formControlName="password"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="block" [disabled]= "loginForm.invalid" class="btn btn-primary my-4" (click)="login(loginForm.value)" >Login</ion-button>
+  </form>  
+</ion-content>

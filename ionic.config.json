@@ -1,5 +1,7 @@
 {
   "name": "Attendence_client",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
