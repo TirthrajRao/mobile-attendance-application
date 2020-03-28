@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-
+import { HttpClientModule }    from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 
 import { LoginPageRoutingModule } from './login-routing.module';
@@ -14,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 	CommonModule,
 	FormsModule,
 	IonicModule,
+	HttpClientModule,
 	LoginPageRoutingModule,
 	ReactiveFormsModule
 	],
