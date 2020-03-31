@@ -26,7 +26,7 @@ export class LoginPage implements OnInit {
 		private splashScreen: SplashScreen,
 		private statusBar: StatusBar,
 		public _router: Router,
-		public _loginService: LoginService
+		public _loginService: LoginService,
 		) { 
 		this.loginForm = new FormGroup({
 			email: new FormControl('', Validators.required),
