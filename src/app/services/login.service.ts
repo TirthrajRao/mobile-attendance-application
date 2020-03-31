@@ -1,7 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { of, pipe } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, timeout} from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import  { config } from '../config'; 
 
