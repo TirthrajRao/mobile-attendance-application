@@ -6,6 +6,9 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/services/login.service';
+import { Storage } from '@ionic/storage';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+
 
 @Component({
 	selector: 'app-login',
@@ -27,6 +30,8 @@ export class LoginPage implements OnInit {
 		private statusBar: StatusBar,
 		public _router: Router,
 		public _loginService: LoginService,
+		private _storage: Storage,
+		private _nativeStorage: NativeStorage
 		) { 
 		this.loginForm = new FormGroup({
 			email: new FormControl('', Validators.required),
@@ -52,20 +57,34 @@ export class LoginPage implements OnInit {
 			console.log("successfull login"  , response);
 			this.isDisable = false;
 			this.isError = false;
-			localStorage.setItem('currentUser', JSON.stringify(response));
-			this._router.navigate(['folder']);
-		},(err) => {
-			console.log(err.status)
-			if(err.status == 400){
-				this.errorMessage = "Check your Email/Password and try again";
-			}else if(err.status == 404){
-				this.errorMessage = "Please check out the connection and try again";
-			}else if(err.status == 500){
-				this.errorMessage = "We are sorry for it , try again after sometime";
-			}
-			this.isError = true;
-			console.log("err in login " , err);
-		})
+			// this._storage.set('currentUser', response);
+			// // storage.set('name', 'Max');
+
+			// // Or to get a key/value pair
+			// this._storage.get('age').then((val) => {
+				// 	console.log('Your age is', val);
+				// });
+				this.platform.ready().then(() => {
+					this._nativeStorage.setItem('myitem', {property: 'value', anotherProperty: 'anotherValue'})
+					.then(
+						() => console.log('Stored item!'),
+						error => console.error('Error storing item', error)
+						); });
+
+				localStorage.setItem('currentUser', JSON.stringify(response));
+				this._router.navigate(['']);
+			},(err) => {
+				console.log(err.status)
+				if(err.status == 400){
+					this.errorMessage = "Check your Email/Password and try again";
+				}else if(err.status == 404){
+					this.errorMessage = "Please check out the connection and try again";
+				}else if(err.status == 500){
+					this.errorMessage = "We are sorry for it , try again after sometime";
+				}
+				this.isError = true;
+				console.log("err in login " , err);
+			})
 		console.log(value);
 	}
 }

@@ -1,0 +1,73 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+		</ion-buttons>
+		<ion-title>
+			Dashboard
+		</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content color="primary">
+	<div>
+		<div class="container pt-5">
+			<div class="row">
+				<div class="col-12">
+					<div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body button" data-toggle="tooltip" title="Log Attendance" style="height: 132px">
+                  <div class="row">
+                    <div class="col">
+                      <p class="card-title text-uppercase text-muted mb-1">Fill Attendance</p>
+                      <span *ngIf="!filledAttendanceLog" class="h6 mb-2 text-danger">You are left with your today's attendance !!!</span>
+                    </div>
+                  </div>
+                  <div style="position: absolute; bottom: 10px;">
+                    <p class="mt-3 mb-0 text-muted text-sm" *ngIf="entry">
+                      <span class="text-nowrap">Your Entry Time :</span>
+                      <!-- <span class="text-success mr-2"> {{entry}} </span> -->
+                    </p>
+                    <p class="mt-3 mb-0 text-muted text-sm" *ngIf="exit">
+                      <span class="text-nowrap">Your Last Exit Time :</span>
+                      <!-- <span class="text-danger mr-2"> {{exit}} </span> -->
+                    </p>
+                  </div>
+                </div>
+              </div>
+				</div>
+			</div>
+		</div>
+		<div class="container mt-4">
+			<div class="row">
+				<div class="col-12">
+					<table class="table table-light table-hover">
+						<thead>
+							<tr>
+								<th>DATE</th>
+								<th>DAY</th>
+								<th>HR WORKED</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>02/04/2020</td>
+								<td>Thursday</td>
+								<td>03:31:46</td>
+							</tr>
+							<tr>
+								<td>02/04/2020</td>
+								<td>Thursday</td>
+								<td>03:31:46</td>
+							</tr>
+							<tr>
+								<td>02/04/2020</td>
+								<td>Thursday</td>
+								<td>03:31:46</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</ion-content>

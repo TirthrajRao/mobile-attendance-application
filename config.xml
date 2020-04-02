@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Attendece</name>
+    <name>Attendence</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
     <access origin="*" />
-    <allow-navigation href="http://localhost:8080/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -112,6 +111,7 @@
         <icon src="resources/windows/icon/StoreLogo.png" target="StoreLogo" />
         <splash src="resources/windows/splash/Splash.png" target="SplashScreen" />
     </platform>
-    <allow-navigation href="192.168.43.79:4000/*" />
-    <engine name="android" />
+    <allow-navigation href="http://192.168.43.65" />
+    <allow-navigation href="http://localhost:8101" sessionid="6103224b" />
+    <allow-navigation href="http://localhost:8100" sessionid="5b86852d" />
 </widget>
