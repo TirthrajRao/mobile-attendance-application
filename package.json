@@ -28,6 +28,7 @@
     "@ionic/storage": "^2.2.0",
     "@ng-bootstrap/ng-bootstrap": "^2.0.0-alpha.0",
     "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
+    "@types/jquery": "^3.3.34",
     "bootstrap": "^4.0.0",
     "cordova-android": "8.1.0",
     "cordova-browser": "6.0.0",
@@ -41,7 +42,10 @@
     "cordova-windows": "7.0.1",
     "core-js": "^2.5.4",
     "ionic-angular": "^3.9.9",
+    "jquery": "^3.4.1",
+    "moment": "^2.24.0",
     "rxjs": "~6.5.1",
+    "sweetalert2": "^9.10.9",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
   },
