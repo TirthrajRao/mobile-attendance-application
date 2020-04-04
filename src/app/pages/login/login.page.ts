@@ -59,6 +59,7 @@ export class LoginPage implements OnInit {
 			this.isError = false;
 			localStorage.setItem('currentUser', JSON.stringify(response));
 			this._router.navigate(['']);
+			this.loginForm.reset();
 		},(err) => {
 			console.log(err.status)
 			if(err.status == 400){
