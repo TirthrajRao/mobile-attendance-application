@@ -6,6 +6,9 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
 import { LoginService } from 'src/app/services/login.service';
+import { Storage } from '@ionic/storage';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+
 
 @Component({
 	selector: 'app-login',
@@ -27,6 +30,8 @@ export class LoginPage implements OnInit {
 		private statusBar: StatusBar,
 		public _router: Router,
 		public _loginService: LoginService,
+		private _storage: Storage,
+		private _nativeStorage: NativeStorage
 		) { 
 		this.loginForm = new FormGroup({
 			email: new FormControl('', Validators.required),
@@ -53,7 +58,7 @@ export class LoginPage implements OnInit {
 			this.isDisable = false;
 			this.isError = false;
 			localStorage.setItem('currentUser', JSON.stringify(response));
-			this._router.navigate(['folder']);
+			this._router.navigate(['']);
 		},(err) => {
 			console.log(err.status)
 			if(err.status == 400){
