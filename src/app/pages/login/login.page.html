@@ -1,5 +1,5 @@
 <ion-content padding center text-center>
-  <img class="abc" src="assets/icon/bg.jpg">
+  <img class="login_bg" src="assets/icon/bg1.jfif">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -13,7 +13,9 @@
             <label>Password : </label>
             <input class="form-control" formControlName="password" placeholder="Password" type="password">
           </div>
-          <ion-button expand="block" color="primary" (click)="login(loginForm.value)" [disabled]= "isDisable || loginForm.invalid">Login</ion-button>
+          <div class="text-center btn-md">
+          <button (click)="login(loginForm.value)" class="btn btn-primary m-auto" [disabled]= "isDisable || loginForm.invalid">Login</button>
+          </div>
         </form> 
         <p *ngIf="isError" class="h6 mt-3 text-center text-danger">{{errorMessage}}</p>   
       </div>

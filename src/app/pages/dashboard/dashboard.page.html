@@ -10,7 +10,6 @@
 </ion-header>
 
 <ion-content color="primary">
-	<div>
 		<div class="container pt-5">
 			<div class="row">
 				<div class="col-12">
@@ -20,6 +19,13 @@
 								<div class="col">
 									<p class="card-title text-uppercase text-muted mb-1">Fill Attendance</p>
 									<span *ngIf="!filledAttendanceLog" class="h6 mb-2 text-danger">You are left with your today's attendance !!!</span>
+									<span *ngIf="filledAttendanceLog && entry" class="h6 font-weight-bold mb-2 text-success">You filled your attendance</span>	
+									<span *ngIf="filledAttendanceLog && exit" class="h6 font-weight-bold mb-2 text-danger">Start the time log if you wish to work again !!!</span>	
+								</div>
+								<div class="col-auto">
+									<div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+										<i class="fas fa-chart-bar"></i>
+									</div>
 								</div>
 							</div>
 							<div style="position: absolute; bottom: 10px;">
@@ -38,8 +44,8 @@
 			</div>
 		</div>
 
-		<div class="container-fluid mt-4">
-			<div class="row mt-5 " >
+		<div class="container-fluid">
+			<div class="row mt-4" >
 				<div class="col-xl-12 mb-5 mb-xl-0">
 					<div class="card shadow">
 						<div class="card-header border-0">
@@ -86,12 +92,10 @@
 				<div class="row align-items-center justify-content-xl-between">
 					<div class="col-xl-6">
 						<div class="copyright text-center text-xl-left text-muted">
-							&copy; 2019 <a href="https://raoinformationtechnology.com/" class="text-muted font-weight-bold ml-1" target="_blank">Rao Infotech</a>
+							&copy; 2019 <a href="https://raoinformationtechnology.com/" class="text-dark font-weight-bold ml-1" target="_blank">Rao Infotech</a>
 						</div>
 					</div>
-
 				</div>
 			</footer>
 		</div>
-	</div>
 </ion-content>

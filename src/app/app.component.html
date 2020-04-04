@@ -1,12 +1,14 @@
 <ion-app>
+
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
           <ion-list-header>
-            <img src="assets/icon/raoinfotech-logo-small.png" class="m-auto pb-4" width="100">
+            <img src="assets/icon/raoinfotech-logo-small.png" class="m-auto pt-3 pb-4" width="100">
           </ion-list-header>
           <ion-note>raoinformation@gmail.com</ion-note>
+          <hr>
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
@@ -14,34 +16,20 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
-
-        <!-- <ion-list id="labels-list"> -->
-          <!-- <ion-list-header>Labels</ion-list-header> -->
-
-          <!-- <ion-item *ngFor="let label of labels" lines="none">
-            <ion-icon slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
-            <ion-label>{{ label }}</ion-label>
-          </ion-item> -->
-
-          <!-- </ion-list> -->
-        </ion-content>
-
-
-        <ion-footer>
-          <ion-toolbar>
-            <div class="footer">
-              <div class="footer-social">
-                <ion-icon (click)="openFacebookProfile()" name="logo-facebook"></ion-icon>
-                <ion-icon (click)="openTwitterProfile()" name="logo-twitter"></ion-icon>
-                <ion-icon (click)="openWebsite()" name="globe"></ion-icon>
-              </div>
+      </ion-content>
+      <ion-footer>
+        <ion-toolbar>
+          <div class="footer">
+            <div class="footer-social">
+              <ion-icon (click)="openFacebookProfile()" name="logo-facebook"></ion-icon>
+              <ion-icon (click)="openTwitterProfile()" name="logo-twitter"></ion-icon>
+              <ion-icon (click)="openWebsite()" name="globe"></ion-icon>
             </div>
+          </div>
+        </ion-toolbar>
+      </ion-footer>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
 
-          </ion-toolbar>
-        </ion-footer>
-      </ion-menu>
-      <ion-router-outlet id="main-content"></ion-router-outlet>
-
-
-    </ion-split-pane>
-  </ion-app>
+</ion-app>
