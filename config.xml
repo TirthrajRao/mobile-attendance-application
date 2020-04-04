@@ -3,8 +3,9 @@
     <name>Attendece</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://localhost:8100" />
+    <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="http://localhost:8080/*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -111,6 +112,6 @@
         <icon src="resources/windows/icon/StoreLogo.png" target="StoreLogo" />
         <splash src="resources/windows/splash/Splash.png" target="SplashScreen" />
     </platform>
-    <allow-navigation href="http://localhost:8101" sessionid="6103224b" />
-    <allow-navigation href="http://localhost:8100" sessionid="5b86852d" />
+    <allow-navigation href="192.168.43.79:4000/*" />
+    <engine name="android" />
 </widget>
