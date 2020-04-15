@@ -4,6 +4,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-root',
@@ -11,32 +12,24 @@ import { Router } from '@angular/router';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public selectedIndex = 0;
   userInfo:any;
-
-   public appPages = [
-  {
-    title: 'Dashboard',
-    url: '/pages/dashboard',
-    icon: 'paper-plane'
-  },
-  {
-    title: 'Logout',
-    url: '/login',
-    icon: 'warning'
-  }
-  ];
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private _router: Router,
-    private _nav: NavController
+    private _nav: NavController,
+    private loginService: LoginService
     ) {
     this.initializeApp();
+    this.loginService.isLoggedIn.subscribe((data) => {
+      if(data === 'loggedIn') {
+        this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+      }
+    })
   }
-
+  
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -53,11 +46,11 @@ export class AppComponent implements OnInit {
       this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
       this._router.navigate(['/']);
     }
-
-    const path = window.location.pathname.split('folder/')[1];
-    if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
-    }
   }
 
+  logout() {
+    this.loginService.logout();
+    this._router.navigate(['login']);
+    localStorage.removeItem('currentUser');
+  }
 }

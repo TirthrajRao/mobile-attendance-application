@@ -33,6 +33,10 @@ export class LoginPage implements OnInit {
 		private _storage: Storage,
 		private _nativeStorage: NativeStorage
 		) { 
+		if (this._loginService.currentUserValue) { 
+			this._router.navigate(['/']);
+		}
+
 		this.loginForm = new FormGroup({
 			email: new FormControl('', Validators.required),
 			password:new FormControl('' , Validators.required)
@@ -58,7 +62,7 @@ export class LoginPage implements OnInit {
 			this.isDisable = false;
 			this.isError = false;
 			localStorage.setItem('currentUser', JSON.stringify(response));
-			this._router.navigate(['']);
+			this._router.navigate(['/']);
 			this.loginForm.reset();
 		},(err) => {
 			console.log(err.status)
