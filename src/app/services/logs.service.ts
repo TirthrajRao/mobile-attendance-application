@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import  { config } from '../config'; 
+// import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogsService {
 
-  constructor(public _http: HttpClient) { }
+  constructor(public _http: HttpClient,
+        // private backgroundMode: BackgroundMode
+      ) { 
+        // this.backgroundMode.enable();
+  }
 
   getCurrentDateLogById(){
   	console.log(" Into the service ");
@@ -40,5 +45,8 @@ export class LogsService {
     console.log(body);
     return this._http.post( config.baseApiUrl+"attendance/get-last-five-days-logs" , body);  
   } 
-  
+
+  getCurrent(){
+    return this._http.get( config.baseApiUrl+"constant-call");
+  }
 }
