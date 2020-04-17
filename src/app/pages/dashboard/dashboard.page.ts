@@ -1,5 +1,6 @@
 import { Component, OnInit, Output , Input , ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Platform, NavController} from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
 import { interval, Subscription } from 'rxjs';
 
@@ -30,17 +31,23 @@ export class DashboardPage implements OnInit {
 	constructor(
 		private _logService: LogsService,
 		private _router: Router,
+		private platform: Platform
 		) { 
 	}
 
 	ngOnInit() {
 		this.getLastFiveDaysAttendance();
 
-		const source = interval(5000);
-		this.subscription = source.subscribe(val => this.opensnack());
+		// const source = interval(10000);
+		// this.subscription = source.subscribe(val => this.opensnack());
+		this.ionViewDidEnter();
+		this.ionViewWillLeave();
+		this.opensnack();
 	}
 
 	opensnack() {
+		setInterval(() => {
+			// alert("Hello"); 
 		this._logService.getCurrent().subscribe((res:any) => {
 			console.log("res is ngOninit", res);
 		}, (err) => {
@@ -67,6 +74,7 @@ export class DashboardPage implements OnInit {
 				console.log("the dates is ===>", this.dates);
 			}
 		})		
+		}, 60000);
 	}
 
 	ngOnDestroy() {
@@ -133,5 +141,15 @@ export class DashboardPage implements OnInit {
 			return obj.date = moment(obj.date).utc().format("DD/MM/YYYY");
 
 		});
+	}
+
+	ionViewDidEnter(){
+		this.subscription = this.platform.backButton.subscribe(()=>{
+			navigator['app'].exitApp();
+		});
+	}
+
+	ionViewWillLeave(){
+		this.subscription.unsubscribe();
 	}
 }

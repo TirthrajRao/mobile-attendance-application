@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, NavController} from '@ionic/angular';
+import { Platform, NavController, ActionSheetController, ToastController} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
+import {  ViewChildren, QueryList } from '@angular/core';
+import { IonRouterOutlet } from '@ionic/angular';
+import {Toast} from "@ionic-native/toast";
 
 @Component({
   selector: 'app-root',
@@ -13,6 +16,9 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class AppComponent implements OnInit {
   userInfo:any;
+  lastTimeBackPress = 0;
+  timePeriodToExit = 2000;
+  @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
   constructor(
     private platform: Platform,
@@ -20,6 +26,8 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     private _router: Router,
     private _nav: NavController,
+    private actionSheetCtrl: ActionSheetController,
+    private toast: ToastController,
     private loginService: LoginService
     ) {
     this.initializeApp();
@@ -27,9 +35,33 @@ export class AppComponent implements OnInit {
       if(data === 'loggedIn') {
         this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
       }
-    })
+    });
+
+    this.backButtonEvent();
   }
-  
+
+  backButtonEvent() {
+    this.platform.backButton.subscribe(async () => {
+      try {
+        const element = await this.actionSheetCtrl.getTop();
+        if (element) {
+          element.dismiss();
+          return;
+        }
+      } catch (error) {
+      }
+      this.routerOutlets.forEach((outlet: IonRouterOutlet) => {
+        if (outlet && outlet.canGoBack()) {
+          outlet.pop();
+        } else if (this._router.url === '') {
+          if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
+            navigator['app'].exitApp(); 
+          }
+        }
+      });
+    });
+  }
+
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -53,4 +85,6 @@ export class AppComponent implements OnInit {
     this._router.navigate(['login']);
     localStorage.removeItem('currentUser');
   }
+
+
 }
