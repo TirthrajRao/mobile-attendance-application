@@ -21,7 +21,7 @@ export class DashboardPage implements OnInit {
 	exit : any ;
 	fiveDaysLogs : any = [];
 	subscription: Subscription;
-	intervalId: number;
+	intervalId: any;
 	loginFlag
 	dates : any = [];
 	alldate = {
@@ -37,52 +37,11 @@ export class DashboardPage implements OnInit {
 
 	ngOnInit() {
 		this.getLastFiveDaysAttendance();
-
-		// const source = interval(10000);
-		// this.subscription = source.subscribe(val => this.opensnack());
 		this.ionViewDidEnter();
 		this.ionViewWillLeave();
-		this.opensnack();
 	}
 
-	opensnack() {
-		setInterval(() => {
-			// alert("Hello"); 
-		this._logService.getCurrent().subscribe((res:any) => {
-			console.log("res is ngOninit", res);
-		}, (err) => {
-			console.log("the error ===>", err.status);
-			if (err.status == 200) {
-				var time = new Date();
-				var hrs = time.getHours();
-				var min = time.getMinutes();
-				var sec = time.getSeconds();
-
-				if (hrs > 12) {
-					hrs = hrs - 12;
-				}
-
-				if (hrs == 0) {
-					hrs = 12;
-				}
-				this.alldate.dates = document.getElementById('clock').innerHTML = hrs + ':' + min + ':' + sec;			
-				console.log("the alldate", this.alldate);
-				localStorage.setItem('date', JSON.stringify(this.alldate))
-				var getdate = JSON.parse(localStorage.getItem('date'));
-				console.log("the date is ===>", getdate);
-				this.dates.push(getdate);
-				console.log("the dates is ===>", this.dates);
-			}
-		})		
-		}, 60000);
-	}
-
-	ngOnDestroy() {
-		this.subscription && this.subscription.unsubscribe();
-
-		clearInterval(this.intervalId);
-	}
-
+	
 
 	fillAttendance(){
 		this._logService.fillAttendance().subscribe((response:any) =>{
@@ -111,45 +70,94 @@ export class DashboardPage implements OnInit {
 			var timeLogLength = this.filledAttendanceLog[0].timeLog.length - 1;
 			console.log(timeLogLength);
 			var lastRecord = this.filledAttendanceLog[0].timeLog[timeLogLength].out;
+			console.log("the last lastRecord is ====>", lastRecord);
 			if(lastRecord != '-'){
 				this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
+				console.log("the exit of function is ====>", this.exit);
 				this.entry = false;
+				this.closedata();
 			}else{
-				this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
+				this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in;
+				console.log("the entry function is ===>", this.entry); 
 				this.exit = false;
+				this.opensnack();
 			}
 		} , (err) =>{
 			console.log("err ===>" , err);
 		});
 	}
 
-	getLastFiveDaysAttendance(){
-		var id = 0;
-		this._logService.getLastFiveDaysAttendance(id).subscribe((response:any) => {
-			console.log("last five days response" , response);
-			if(response.message != 'No logs found'){
-				this.fiveDaysLogs = this.properFormatDate(response.foundLogs);
-				this.fiveDaysLogs = this.fiveDaysLogs.reverse();  
-			}
-		} ,(err) => {
-			console.log("last five days error" , err);
-		});
+	opensnack() {
+		console.log("the opensnack function is called");
+		this.intervalId = setInterval(() => {
+			this._logService.getCurrent().subscribe((res:any) => {
+				console.log("res is ngOninit", res);
+			}, (err) => {
+				console.log("the error ===>", err.status);
+				if (err.status == 200) {
+					var time = new Date();
+					var hrs = time.getHours();
+					var min = time.getMinutes();
+					var sec = time.getSeconds();
+
+					if (hrs > 12) {
+						hrs = hrs - 12;
+					}
+
+					if (hrs == 0) {
+						hrs = 12;
+					}
+					this.alldate.dates = document.getElementById('clock').innerHTML = hrs + ':' + min + ':' + sec;			
+					console.log("the alldate", this.alldate);
+					localStorage.setItem('date', JSON.stringify(this.alldate))
+					var getdate = JSON.parse(localStorage.getItem('date'));
+					console.log("the date is ===>", getdate);
+					this.dates.push(getdate);
+					console.log("the dates is ===>", this.dates);
+				}
+			})		
+		}, 5000);
 	}
 
-	properFormatDate(data){
-		return data = data.filter((obj)=>{
-			return obj.date = moment(obj.date).utc().format("DD/MM/YYYY");
+	// ngOnDestroy() {
+		// 	this.subscription && this.subscription.unsubscribe();
 
-		});
-	}
+		// 	clearInterval(this.intervalId);
+		// }
 
-	ionViewDidEnter(){
-		this.subscription = this.platform.backButton.subscribe(()=>{
-			navigator['app'].exitApp();
-		});
-	}
+		closedata(){
+			console.log("the closedata function is called");
+			localStorage.removeItem("date");
+			clearInterval(this.intervalId);
+		}
 
-	ionViewWillLeave(){
-		this.subscription.unsubscribe();
+		getLastFiveDaysAttendance(){
+			var id = 0;
+			this._logService.getLastFiveDaysAttendance(id).subscribe((response:any) => {
+				console.log("last five days response" , response);
+				if(response.message != 'No logs found'){
+					this.fiveDaysLogs = this.properFormatDate(response.foundLogs);
+					this.fiveDaysLogs = this.fiveDaysLogs.reverse();  
+				}
+			} ,(err) => {
+				console.log("last five days error" , err);
+			});
+		}
+
+		properFormatDate(data){
+			return data = data.filter((obj)=>{
+				return obj.date = moment(obj.date).utc().format("DD/MM/YYYY");
+
+			});
+		}
+
+		ionViewDidEnter(){
+			this.subscription = this.platform.backButton.subscribe(()=>{
+				navigator['app'].exitApp();
+			});
+		}
+
+		ionViewWillLeave(){
+			this.subscription.unsubscribe();
+		}
 	}
-}

@@ -30,12 +30,24 @@ export class AppComponent implements OnInit {
     private toast: ToastController,
     private loginService: LoginService
     ) {
+    
+    if(!this.userInfo){
+      this._router.navigate(['/login']);
+    }else{
+      console.log("called 2nd time");
+      console.log(this.userInfo);
+      this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+      this._router.navigate(['']);
+    }
+    
     this.initializeApp();
+    
     this.loginService.isLoggedIn.subscribe((data) => {
       if(data === 'loggedIn') {
         this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
       }
     });
+
 
     this.backButtonEvent();
   }
@@ -70,14 +82,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(!this.userInfo){
-      this._router.navigate(['/login']);
-    }else{
-      console.log("called 2nd time");
-      console.log(this.userInfo);
-      this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
-      this._router.navigate(['/']);
-    }
+    
   }
 
   logout() {
