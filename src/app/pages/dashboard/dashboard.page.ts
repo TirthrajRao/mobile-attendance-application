@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Platform, NavController} from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
 import { interval, Subscription } from 'rxjs';
-
+import { EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 declare var $;
 
@@ -33,22 +33,61 @@ export class DashboardPage implements OnInit {
 		private _router: Router,
 		private platform: Platform
 		) { 
+		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+		if(!this.userInfo){
+			this._router.navigate(['/login']);
+		}
+
+		if(this.userInfo.userRole != 'admin'){
+			this.getLastFiveDaysAttendance();
+			this.getCurrentDateLogById();
+			// this.opensnack();
+		}
 	}
 
 	ngOnInit() {
-		this.getLastFiveDaysAttendance();
 		this.ionViewDidEnter();
 		this.ionViewWillLeave();
 	}
 
+	getCurrentDateLogById(){
+		this._logService.getCurrentDateLogById().subscribe((response:any) => {
+			console.log("response of getCurrentDateLogById ===>" , response);
+			if(response.length){
+				this.filledAttendanceLog = this.properFormatDate(response);
+				console.log("the filledAttendanceLog is =======>", this.filledAttendanceLog);
+				// this.filledAttendanceLog = response;
+
+				var timeLogLength = this.filledAttendanceLog[0].timeLog.length - 1;
+				console.log(timeLogLength);
+				var lastRecord = this.filledAttendanceLog[0].timeLog[timeLogLength].out;
+				if(lastRecord != '-'){
+					this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
+					this.entry = false;
+								this.closedata();
 	
+				}else{
+					this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
+					this.exit = false;
+					this.opensnack();
+				}
+
+			}	
+		}, (err)=>{
+			console.log("error of getCurrentDateLogById ===>" , err);
+		});
+	}
 
 	fillAttendance(){
 		this._logService.fillAttendance().subscribe((response:any) =>{
 			console.log("response ====>" , response);
 
 			this.filledAttendanceLog = this.properFormatDate(response);
+			console.log("the filledAttendanceLog is =======>", this.filledAttendanceLog);
+
 			this.filledAttendanceLog=this.filledAttendanceLog.reverse();  
+			console.log("the filledAttendanceLog reverse is =======>", this.filledAttendanceLog);
+
 			var flag = 0;
 			if(this.fiveDaysLogs){
 				console.log("IN IFFFFFFFFFFFFF =============?");
@@ -119,45 +158,39 @@ export class DashboardPage implements OnInit {
 		}, 5000);
 	}
 
-	// ngOnDestroy() {
-		// 	this.subscription && this.subscription.unsubscribe();
-
-		// 	clearInterval(this.intervalId);
-		// }
-
-		closedata(){
-			console.log("the closedata function is called");
-			localStorage.removeItem("date");
-			clearInterval(this.intervalId);
-		}
-
-		getLastFiveDaysAttendance(){
-			var id = 0;
-			this._logService.getLastFiveDaysAttendance(id).subscribe((response:any) => {
-				console.log("last five days response" , response);
-				if(response.message != 'No logs found'){
-					this.fiveDaysLogs = this.properFormatDate(response.foundLogs);
-					this.fiveDaysLogs = this.fiveDaysLogs.reverse();  
-				}
-			} ,(err) => {
-				console.log("last five days error" , err);
-			});
-		}
-
-		properFormatDate(data){
-			return data = data.filter((obj)=>{
-				return obj.date = moment(obj.date).utc().format("DD/MM/YYYY");
-
-			});
-		}
-
-		ionViewDidEnter(){
-			this.subscription = this.platform.backButton.subscribe(()=>{
-				navigator['app'].exitApp();
-			});
-		}
-
-		ionViewWillLeave(){
-			this.subscription.unsubscribe();
-		}
+	closedata(){
+		console.log("the closedata function is called");
+		localStorage.removeItem("date");
+		clearInterval(this.intervalId);
 	}
+
+	getLastFiveDaysAttendance(){
+		var id = 0;
+		this._logService.getLastFiveDaysAttendance(id).subscribe((response:any) => {
+			console.log("last five days response" , response);
+			if(response.message != 'No logs found'){
+				this.fiveDaysLogs = this.properFormatDate(response.foundLogs);
+				this.fiveDaysLogs = this.fiveDaysLogs.reverse();  
+			}
+		} ,(err) => {
+			console.log("last five days error" , err);
+		});
+	}
+
+	properFormatDate(data){
+		return data = data.filter((obj)=>{
+			return obj.date = moment(obj.date).utc().format("DD/MM/YYYY");
+
+		});
+	}
+
+	ionViewDidEnter(){
+		this.subscription = this.platform.backButton.subscribe(()=>{
+			navigator['app'].exitApp();
+		});
+	}
+
+	ionViewWillLeave(){
+		this.subscription.unsubscribe();
+	}
+}
