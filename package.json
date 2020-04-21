@@ -52,6 +52,7 @@
     "ionic-angular": "^3.9.9",
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
+    "moment-duration-format": "^2.3.2",
     "npm-force-resolutions": "0.0.3",
     "npx": "^10.2.2",
     "rxjs": "~6.5.1",

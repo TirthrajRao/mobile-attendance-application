@@ -6,6 +6,8 @@ import { interval, Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 declare var $;
+declare var require: any;
+const momentDurationFormat = require('moment-duration-format');
 
 @Component({
 	selector: 'app-dashboard',
@@ -24,9 +26,12 @@ export class DashboardPage implements OnInit {
 	intervalId: any;
 	loginFlag
 	dates : any = [];
+	getdate:any;
+	olddate:any;
 	alldate = {
 		dates: ""
 	}
+
 
 	constructor(
 		private _logService: LogsService,
@@ -64,8 +69,8 @@ export class DashboardPage implements OnInit {
 				if(lastRecord != '-'){
 					this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
 					this.entry = false;
-								this.closedata();
-	
+					this.closedata();
+
 				}else{
 					this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
 					this.exit = false;
@@ -126,6 +131,18 @@ export class DashboardPage implements OnInit {
 		});
 	}
 
+	hmsToSeconds(s) {
+		var b = s.split(':');
+		return b[0]*3600 + b[1]*60 + (+b[2] || 0);
+	}
+
+	secondsToHMS(secs) {
+		function z(n){return (n<10?'0':'') + n;}
+		var sign = secs < 0? '-':'';
+		secs = Math.abs(secs);
+		return sign + z(secs/3600 |0) + ':' + z((secs%3600) / 60 |0) + ':' + z(secs%60);
+	}
+	
 	opensnack() {
 		console.log("the opensnack function is called");
 		this.intervalId = setInterval(() => {
@@ -149,13 +166,46 @@ export class DashboardPage implements OnInit {
 					this.alldate.dates = document.getElementById('clock').innerHTML = hrs + ':' + min + ':' + sec;			
 					console.log("the alldate", this.alldate);
 					localStorage.setItem('date', JSON.stringify(this.alldate))
-					var getdate = JSON.parse(localStorage.getItem('date'));
-					console.log("the date is ===>", getdate);
-					this.dates.push(getdate);
+					this.getdate = JSON.parse(localStorage.getItem('date'));
+					console.log("the date is ===>", this.getdate);
+
+					this.olddate = this.dates[this.dates.length - 1];
+					console.log("the old date is ====>", this.olddate);
+					this.dates.push(this.getdate);
 					console.log("the dates is ===>", this.dates);
+
+					var now  = "11:55:55";
+					var then = "12:55:55";  
+
+					var oldtime = this.olddate.dates;
+					var updatetime = this.alldate.dates;
+
+					var diffrenceTime = this.secondsToHMS(this.hmsToSeconds(updatetime) - this.hmsToSeconds(oldtime));
+					console.log("the diffrenceTime is ====>", diffrenceTime);
+					var given_seconds = 300; 
+
+					var dateObj = new Date(given_seconds * 1000); 
+					var hours = dateObj.getUTCHours(); 
+					var minutes = dateObj.getUTCMinutes(); 
+					var seconds = dateObj.getSeconds(); 
+
+					var timeString = hours.toString().padStart(2, '0') 
+					+ ':' + minutes.toString().padStart(2, '0') 
+					+ ':' + seconds.toString().padStart(2, '0'); 
+
+					console.log("the time string is =======>", timeString);
+
+					if (timeString > diffrenceTime) {
+						console.log("the diffrenceTime isal true");
+					}
+					else{
+						this.fillAttendance();
+						console.log("the diff is false");
+					}
 				}
 			})		
-		}, 5000);
+		}, 120000);
+		console.log("the interval id is ====>", this.intervalId);
 	}
 
 	closedata(){
