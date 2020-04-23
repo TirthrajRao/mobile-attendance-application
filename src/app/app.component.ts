@@ -16,6 +16,14 @@ import {Toast} from "@ionic-native/toast";
 })
 export class AppComponent implements OnInit {
   userInfo:any;
+  public selectedIndex = 0;
+  public appPages = [
+  {
+    title: 'Dashboard',
+    url: 'pages/dashboard',
+    icon: 'mail'
+  }
+  ];
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
