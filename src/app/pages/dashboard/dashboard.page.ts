@@ -5,6 +5,8 @@ import { LogsService } from 'src/app/services/logs.service';
 import { interval, Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import Swal from 'sweetalert2';
+import { LoginService } from 'src/app/services/login.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import * as moment from 'moment';
 declare var $;
@@ -34,6 +36,8 @@ export class DashboardPage implements OnInit {
 	timeOf:any;
 	timeOn:any;
 	diffTime:any;
+	milseconds:any;
+	secondsdata:any = [];
 	timeString:any;
 	alldate = {
 		dates: ""
@@ -45,15 +49,18 @@ export class DashboardPage implements OnInit {
 		private _router: Router,
 		private platform: Platform,
 		private _storage: Storage,
-		private _nativeStorage: NativeStorage
+		private _nativeStorage: NativeStorage,
+		public _loginService: LoginService,
 		) { 
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		if(!this.userInfo){
 			this._router.navigate(['/login']);
 		}
 
+		this.dateStore();
+
 		if(this.userInfo.userRole != 'admin'){
-			this.getLastFiveDaysAttendance();
+			// this.getLastFiveDaysAttendance();
 			this.getCurrentDateLogById();
 		}
 	}
@@ -61,12 +68,12 @@ export class DashboardPage implements OnInit {
 	ngOnInit() {
 		this.ionViewDidEnter();
 		this.ionViewWillLeave();
-		this.alldemo();
 	}
 
 	getCurrentDateLogById(){
 		this._logService.getCurrentDateLogById().subscribe((response:any) => {
 			console.log("response of getCurrentDateLogById ===>" , response);
+
 			if(response.length){
 				this.filledAttendanceLog = this.properFormatDate(response);
 				console.log("the filledAttendanceLog is =======>", this.filledAttendanceLog);
@@ -82,12 +89,48 @@ export class DashboardPage implements OnInit {
 				}else{
 					this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
 					this.exit = false;
-					this.opensnack();
+					console.log("the oldseconds and current seconds diffrence is ====>", this.milseconds);
+					if (this.timeString > this.milseconds) {
+						this.opensnack();
+						console.log("the difftime is true");
+					}
+					else {
+						this.closedata();	
+						this.fillAttendance();
+						console.log("the diffTime is false");
+					}
 				}
 			}	
 		}, (err)=>{
 			console.log("error of getCurrentDateLogById ===>" , err);
 		});
+	}
+
+	dateStore(){
+		var dateObj = new Date(60 * 1000); 
+		var hours = dateObj.getUTCHours(); 
+		var minutes = dateObj.getUTCMinutes(); 
+		var seconds = dateObj.getSeconds(); 
+
+		this.timeString = hours.toString().padStart(2, '0') + 
+		":" + minutes.toString().padStart(2, '0') 
+		+ ':' + seconds.toString().padStart(2, '0'); 
+
+		console.log("the time string is =======>", this.timeString);
+		if (localStorage.getItem('olddate')) {
+			this.olddateCom = JSON.parse(localStorage.getItem('olddate'));
+			console.log("the olddateCom is ======>", this.olddateCom);
+
+			var datesCurrent = moment().format("LTS");
+			console.log("the dates demo is ====>", datesCurrent);
+			var start = moment.utc(this.olddateCom.dates, "hh:mm:ss");
+			var end = moment.utc(datesCurrent, "hh:mm:ss");
+			var dateDiffrence = moment.duration(end.diff(start));
+
+			this.secondsdata.push(dateDiffrence);
+			this.milseconds = moment("1900-01-01 00:00:00").add(this.secondsdata[0]._milliseconds/1000, 'seconds').format("HH:mm:ss")
+			console.log("the oldsecond and current seconds diffrence is ===>", this.milseconds);
+		}
 	}
 
 	fillAttendance(){
@@ -149,104 +192,38 @@ export class DashboardPage implements OnInit {
 		secs = Math.abs(secs);
 		return sign + z(secs/3600 |0) + ':' + z((secs%3600) / 60 |0) + ':' + z(secs%60);
 	}
-
-	alldemo(){
-		var dateObj = new Date(60 * 1000); 
-		var hours = dateObj.getUTCHours(); 
-		var minutes = dateObj.getUTCMinutes(); 
-		var seconds = dateObj.getSeconds(); 
-
-		this.timeString = hours.toString().padStart(2, '0') 
-		+ ':' + minutes.toString().padStart(2, '0') 
-		+ ':' + seconds.toString().padStart(2, '0'); 
-
-		console.log("the time string is =======>", this.timeString);
-	}
-
+	
 	opensnack() {
 		console.log("the opensnack function is called");
 		this.intervalId = setInterval(() => {
 			this._logService.getCurrent().subscribe((res:any) => {
 				console.log("res is ngOninit", res);
 			}, (err) => {
-				this.olddateCom = JSON.parse(localStorage.getItem('olddate'));
-				console.log("the olddateCom is ======>", this.olddateCom);
-
 				console.log("the error ===>", err.status);
 				if (err.status == 200) {
-					var time = new Date();
-					var hrs = time.getHours();
-					var min = time.getMinutes();
-					var sec = time.getSeconds();
-
-					if (hrs > 12) {
-						hrs = hrs - 12;
-					}
-
-					if (hrs == 0) {
-						hrs = 12;
-					}
-					this.alldate.dates = document.getElementById('clock').innerHTML = hrs + ':' + min + ':' + sec;			
+					this.alldate.dates = moment().format("LTS");
 					console.log("the alldate", this.alldate);
 					localStorage.setItem('olddate', JSON.stringify(this.alldate));
 
-					
-					
 					localStorage.setItem('date', JSON.stringify(this.alldate))
 					this.getdate = JSON.parse(localStorage.getItem('date'));
 					console.log("the date is ===>", this.getdate);
 
-					this.timeOf = this.olddateCom.dates;
-					this.timeOn = this.getdate.dates;
-
-					this.diffTime = this.secondsToHMS(this.hmsToSeconds(this.timeOn) - this.hmsToSeconds(this.timeOf));
-					console.log("the diffTime is ====>", this.diffTime);
-					console.log("the time uper is the view ====>", this.timeString);
-
-					var datesdemo = moment().format("LTS")
-					console.log("the dates demo is ====>", datesdemo);
-
-					if (this.diffTime < this.timeString) {
-						console.log("the diffTime condition is true");
-					}
-					else {
-						this.fillAttendance();
-						console.log("the diffTime condition is false");
-					}
-					
-					
 					this.olddate = this.dates[this.dates.length - 1];
 					console.log("the old date is ====>", this.olddate);
 					this.dates.push(this.getdate);
-					console.log("the dates is ===>", this.dates);  
-					var dateobj = new Date(); 
-					var B = dateobj.toISOString(); 
-					console.log("the dTE OBJ IS ====>", B);
+					console.log("the dates is ===>", this.dates);   
 				}
 			})		
 		}, 10000);
 		console.log("the interval id is ====>", this.intervalId);
 	}
 
-
-
 	closedata(){
 		console.log("the closedata function is called");
-		localStorage.removeItem("date");
+		localStorage.removeItem('date');
+		localStorage.removeItem('olddate')
 		clearInterval(this.intervalId);
-	}
-
-	getLastFiveDaysAttendance(){
-		var id = 0;
-		this._logService.getLastFiveDaysAttendance(id).subscribe((response:any) => {
-			console.log("last five days response" , response);
-			if(response.message != 'No logs found'){
-				this.fiveDaysLogs = this.properFormatDate(response.foundLogs);
-				this.fiveDaysLogs = this.fiveDaysLogs.reverse();  
-			}
-		} ,(err) => {
-			console.log("last five days error" , err);
-		});
 	}
 
 	properFormatDate(data){

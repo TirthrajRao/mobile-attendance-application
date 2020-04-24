@@ -36,6 +36,11 @@ export class LoginService {
 		}));
 	}
 
+	getIpCliente(){
+		console.log("called this ==+>");
+		return this._http.get('https://api.ipify.org') 
+	}
+
 	logout() {
         localStorage.removeItem('currentUser');
      	this.currentUserSubject.next(null);	

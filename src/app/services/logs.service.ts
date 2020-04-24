@@ -8,10 +8,14 @@ import  { config } from '../config';
 })
 export class LogsService {
 
+  currentTime:any;
+
   constructor(public _http: HttpClient,
-        // private backgroundMode: BackgroundMode
-      ) { 
-        // this.backgroundMode.enable();
+    ) { 
+    if (localStorage.getItem('olddate')) {
+      this.currentTime = JSON.parse(localStorage.getItem('olddate'));
+      console.log("the currentTime time is ========>", this.currentTime);
+    }
   }
 
   getCurrentDateLogById(){
@@ -20,15 +24,26 @@ export class LogsService {
   		userId : JSON.parse(localStorage.getItem('currentUser'))._id
   	}
     console.log(body);
-  	return this._http.post( config.baseApiUrl+"attendance/get-attendance-by-id" , body);	
+    return this._http.post( config.baseApiUrl+"attendance/get-attendance-by-id" , body);	
   }
+  body:any;
   fillAttendance(){
-  	var body = {
+    if (localStorage.getItem('olddate')) {
+  	this.body = {
   		userId : JSON.parse(localStorage.getItem('currentUser'))._id,
-      loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag
-  	}
-    console.log("Body Of Fill attendace",  body);
-  	return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , body);	
+      loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,
+      lastLog: this.currentTime.dates  
+    }
+    console.log("Body Of Fill attendace",  this.body);
+    }
+    else {
+     this.body = {
+      userId : JSON.parse(localStorage.getItem('currentUser'))._id,
+      loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,  
+    }
+    console.log("Body Of Fill attendace",  this.body); 
+    }
+    return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , this.body);	
   }
   getLastFiveDaysAttendance(id){
     if(id == 0){
@@ -37,7 +52,7 @@ export class LogsService {
         days : '5'
       }
     }else{
-       var body = {
+      var body = {
         userId : id,
         days : '5'
       } 
