@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
@@ -31,8 +31,10 @@ export class LoginPage implements OnInit {
 		public _router: Router,
 		public _loginService: LoginService,
 		private _storage: Storage,
-		private _nativeStorage: NativeStorage
+		private _nativeStorage: NativeStorage,
+		private _loding: LoadingController
 		) { 
+		
 		if (this._loginService.currentUserValue) { 
 			this._router.navigate(['']);
 		}
@@ -77,5 +79,5 @@ export class LoginPage implements OnInit {
 			console.log("err in login " , err);
 		})
 		console.log(value);
-	}
+	}	
 }

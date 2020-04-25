@@ -26,24 +26,13 @@ export class LogsService {
     console.log(body);
     return this._http.post( config.baseApiUrl+"attendance/get-attendance-by-id" , body);	
   }
-  body:any;
   fillAttendance(){
-    if (localStorage.getItem('olddate')) {
-  	this.body = {
-  		userId : JSON.parse(localStorage.getItem('currentUser'))._id,
-      loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,
-      lastLog: this.currentTime.dates  
-    }
-    console.log("Body Of Fill attendace",  this.body);
-    }
-    else {
-     this.body = {
+    var body = {
       userId : JSON.parse(localStorage.getItem('currentUser'))._id,
       loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,  
     }
-    console.log("Body Of Fill attendace",  this.body); 
-    }
-    return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , this.body);	
+    console.log("Body Of Fill attendace",  body); 
+    return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , body);	
   }
   getLastFiveDaysAttendance(id){
     if(id == 0){

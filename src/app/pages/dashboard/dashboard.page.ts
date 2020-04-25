@@ -128,7 +128,7 @@ export class DashboardPage implements OnInit {
 			var dateDiffrence = moment.duration(end.diff(start));
 
 			this.secondsdata.push(dateDiffrence);
-			this.milseconds = moment("1900-01-01 00:00:00").add(this.secondsdata[0]._milliseconds/1000, 'seconds').format("HH:mm:ss")
+			this.milseconds = moment("1900-01-01 00:00:00").add(this.secondsdata[0]._milliseconds/1000, 'seconds').format("hh:mm:ss")
 			console.log("the oldsecond and current seconds diffrence is ===>", this.milseconds);
 		}
 	}
