@@ -1,5 +1,7 @@
 {
   "name": "Attendence",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

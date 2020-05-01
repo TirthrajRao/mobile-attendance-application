@@ -37,9 +37,31 @@
               },
               {
                 "input": "src/global.scss"
+              },
+              {
+                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
+              },
+              {
+                "input": "./node_modules/ng2-daterangepicker/assets/daterangepicker.css"
               }
             ],
-            "scripts": []
+            "scripts": [
+              {
+                "input": "./node_modules/jquery/dist/jquery.min.js",
+              },
+              {
+                "input": "./node_modules/bootstrap/dist/js/bootstrap.js",
+              },
+              {
+                "input": "./node_modules/daterangepicker/moment.min.js",
+              },
+              {
+                "input": "./node_modules/daterangepicker/daterangepicker.js",
+              },
+              {
+                "input": "./node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+              }
+            ]
           },
           "configurations": {
             "production": {

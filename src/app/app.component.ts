@@ -1,8 +1,15 @@
+
 import { Component, OnInit } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, NavController, ActionSheetController, ToastController, LoadingController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { FormGroup , FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
+import {  ViewChildren, QueryList } from '@angular/core';
+import { IonRouterOutlet } from '@ionic/angular';
+// import {Toast} from "@ionic-native/toast";
 
 @Component({
   selector: 'app-root',
@@ -10,47 +17,110 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
+  userInfo:any;
+  navigate:any;
+
+  lastTimeBackPress = 0;
+  timePeriodToExit = 2000;
   public selectedIndex = 0;
   public appPages = [
     {
-      title: 'Inbox',
-      url: '/folder/Inbox',
-      icon: 'mail'
+      title: 'Dashboard',
+      url: '',
+      icon: 'home'
     },
     {
-      title: 'Outbox',
-      url: '/folder/Outbox',
+      title: 'Logs-Summary',
+      url: '/logs-summary',
       icon: 'paper-plane'
-    },
-    {
-      title: 'Favorites',
-      url: '/folder/Favorites',
-      icon: 'heart'
-    },
-    {
-      title: 'Archived',
-      url: '/folder/Archived',
-      icon: 'archive'
-    },
-    {
-      title: 'Trash',
-      url: '/folder/Trash',
-      icon: 'trash'
-    },
-    {
-      title: 'Spam',
-      url: '/folder/Spam',
-      icon: 'warning'
     }
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
-  ) {
+    private statusBar: StatusBar,
+    private _router: Router,
+    private _nav: NavController,
+    private actionSheetCtrl: ActionSheetController,
+    private toast: ToastController,
+    private loginService: LoginService,
+    private _loadingController: LoadingController
+    )  {
+    this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+    // this.sideMenu();
     this.initializeApp();
+    
+    this.loginService.isLoggedIn.subscribe((data) => {
+      if(data === 'loggedIn') {
+        this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+      }
+    });
+
+    this.backButtonEvent();
+  }
+
+  private loading;
+  ngOnInit() {
+    if(!this.userInfo){
+      this._router.navigate(['/login']);
+    }else{
+      console.log("called 2nd time");
+      console.log(this.userInfo);
+      this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+      // this._router.navigate(['']);
+      this._loadingController.create({
+          message: ''
+        }).then((overlay) => {
+          this.loading = overlay;
+          this.loading.present();
+        });
+
+        setTimeout(() => {
+          this._loadingController.dismiss();
+          this._nav.navigateRoot('');
+        }, 3000)
+    }
+  }
+
+  // sideMenu()
+  // {
+  //   this.navigate =
+  //   [
+  //   {
+  //     title : "Dashboard",
+  //     url   : "",
+  //     icon  : "home"
+  //   },
+  //   {
+  //     title : "Logs-Summary",
+  //     url   : "logs-summary",
+  //     icon  : "home"
+  //   }
+  //   ]
+  // }
+
+  backButtonEvent() {
+    this.platform.backButton.subscribe(async () => {
+      try {
+        const element = await this.actionSheetCtrl.getTop();
+        if (element) {
+          element.dismiss();
+          return;
+        }
+      } catch (error) {
+      }
+      this.routerOutlets.forEach((outlet: IonRouterOutlet) => {
+        if (outlet && outlet.canGoBack()) {
+          outlet.pop();
+        } else if (this._router.url === '') {
+          if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
+            navigator['app'].exitApp(); 
+          }
+        }
+      });
+    });
   }
 
   initializeApp() {
@@ -60,10 +130,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    const path = window.location.pathname.split('folder/')[1];
-    if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
-    }
+  logout() {
+    this.loginService.logout();
+    this._router.navigate(['login']);
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('olddate');
+    localStorage.removeItem('date');
   }
+
 }

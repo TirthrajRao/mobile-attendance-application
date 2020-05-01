@@ -1,0 +1,24 @@
+<ion-content padding center text-center>
+  <img class="login_bg" src="assets/icon/bg1.jfif">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1><img class="logo" src="assets/icon/raoinfotech-logo-small.png"><br><p color="primary">Attendence</p></h1>
+        <form [formGroup]='loginForm'>
+          <div class="form-group">
+            <label>Email : </label>
+            <input class="form-control" formControlName="email" placeholder="E-mail" type="text">
+          </div>
+          <div class="form-group">
+            <label>Password : </label>
+            <input class="form-control" formControlName="password" placeholder="Password" type="password">
+          </div>
+          <div class="text-center btn-md">
+          <button (click)="login(loginForm.value)" class="btn btn-primary m-auto" [disabled]= "isDisable || loginForm.invalid">Login</button>
+          </div>
+        </form> 
+        <p *ngIf="isError" class="h6 mt-3 text-center text-danger">{{errorMessage}}</p>   
+      </div>
+    </div>
+  </div>
+</ion-content>
