@@ -12,4 +12,4 @@ export class LogsSummaryPage implements OnInit {
 	ngOnInit() {
 	}
 
-	}
+}

@@ -1,6 +1,4 @@
-
 import { Component, OnInit } from '@angular/core';
-
 import { Platform, NavController, ActionSheetController, ToastController, LoadingController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -9,32 +7,38 @@ import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import {  ViewChildren, QueryList } from '@angular/core';
 import { IonRouterOutlet } from '@ionic/angular';
-// import {Toast} from "@ionic-native/toast";
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
+
 export class AppComponent implements OnInit {
   userInfo:any;
   navigate:any;
-
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
+  
   public selectedIndex = 0;
   public appPages = [
-    {
-      title: 'Dashboard',
-      url: '',
-      icon: 'home'
-    },
-    {
-      title: 'Logs-Summary',
-      url: '/logs-summary',
-      icon: 'paper-plane'
-    }
+  {
+    title: 'Dashboard',
+    url: '',
+    icon: 'home'
+  },
+  {
+    title: 'Logs-Summary',
+    url: '/logs-summary',
+    icon: 'paper-plane'
+  },
+  {
+    title: 'User-Profile',
+    url: '/user-profile',
+    icon: 'person'
+  },
   ];
+  
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
   constructor(
@@ -71,35 +75,18 @@ export class AppComponent implements OnInit {
       this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
       // this._router.navigate(['']);
       this._loadingController.create({
-          message: ''
-        }).then((overlay) => {
-          this.loading = overlay;
-          this.loading.present();
-        });
+        message: ''
+      }).then((overlay) => {
+        this.loading = overlay;
+        this.loading.present();
+      });
 
-        setTimeout(() => {
-          this._loadingController.dismiss();
-          this._nav.navigateRoot('');
-        }, 3000)
+      setTimeout(() => {
+        this._loadingController.dismiss();
+        this._nav.navigateRoot('');
+      }, 3000)
     }
   }
-
-  // sideMenu()
-  // {
-  //   this.navigate =
-  //   [
-  //   {
-  //     title : "Dashboard",
-  //     url   : "",
-  //     icon  : "home"
-  //   },
-  //   {
-  //     title : "Logs-Summary",
-  //     url   : "logs-summary",
-  //     icon  : "home"
-  //   }
-  //   ]
-  // }
 
   backButtonEvent() {
     this.platform.backButton.subscribe(async () => {
@@ -137,5 +124,4 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('olddate');
     localStorage.removeItem('date');
   }
-
 }

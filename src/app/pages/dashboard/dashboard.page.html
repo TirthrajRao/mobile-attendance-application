@@ -9,10 +9,14 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content color="primary" padding>
-	<!-- <ion-card class="ion-padding"> -->
-		<!-- <ion-card-content> -->
-						<div class="card m-5 card-stats mb-4">
+<ion-content color="primary">
+	<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+		<div class="container-fluid">
+			<div class="header-body">
+				<!-- Card stats -->
+				<div class="row m-auto">
+					<div class="col-xl-4 col-lg-6 " *ngIf="!userInfo.userRole || userInfo.userRole == 'employee'">
+						<div class="card card-stats mb-4">
 							<div class="card-body button" data-toggle="tooltip" title="Log Attendance" (click)="fillAttendance()" style="height: 132px">
 								<div class="row">
 									<div class="col">
@@ -40,7 +44,7 @@
 							</div>
 						</div>
 
-						<div class="card shadow m-5">
+						<div class="card shadow">
 							<div class="card-header border-0">
 								<div class="row align-items-center">
 									<div class="col">
@@ -88,18 +92,20 @@
 								</tbody>
 							</table>
 						</div>
-			
-		</div>
-	<!-- </ion-card-content> -->
-			<!-- Footer -->
-			<footer class="footer text-center">
-				<div class="row align-items-center justify-content-xl-between">
-					<div class="col-xl-6">
-						<div class="copyright text-center text-xl-left text-muted">
-							&copy; 2019 <a href="https://raoinformationtechnology.com/" class="text-dark font-weight-bold ml-1" target="_blank">Rao Infotech</a>
-						</div>
 					</div>
 				</div>
-			</footer>
-<!-- </ion-card> -->
+			</div>
+		</div>		
+	</div>
+	<!-- Footer -->
+	<footer class="footer text-center mt-4">
+		<div class="row align-items-center justify-content-xl-between">
+			<div class="col-xl-6">
+				<div class="copyright text-center text-xl-left text-muted">
+					&copy; 2019 <a href="https://raoinformationtechnology.com/" class="text-dark font-weight-bold ml-1" target="_blank">Rao Infotech</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+</div>
 </ion-content>

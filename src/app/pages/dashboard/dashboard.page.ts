@@ -4,10 +4,8 @@ import { Platform, NavController, LoadingController, ToastController } from '@io
 import { LogsService } from 'src/app/services/logs.service';
 import { interval, Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
-// import { Storage } from '@ionic/storage';
 import Swal from 'sweetalert2';
 import { LoginService } from 'src/app/services/login.service';
-// import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import * as moment from 'moment';
 declare var $;
 declare var require: any;
@@ -49,8 +47,6 @@ export class DashboardPage implements OnInit {
 		private _logService: LogsService,
 		private _router: Router,
 		private platform: Platform,
-		// private _storage: Storage,
-		// private _nativeStorage: NativeStorage,
 		public _loginService: LoginService,
 		private _loadingController: LoadingController,
 		private _navCtrl: NavController,
@@ -64,7 +60,6 @@ export class DashboardPage implements OnInit {
 		this.dateStore();
 
 		if(this.userInfo.userRole != 'admin'){
-			// this.getLastFiveDaysAttendance();
 			this.getCurrentDateLogById();
 		}
 
@@ -81,7 +76,7 @@ export class DashboardPage implements OnInit {
 	ngOnInit() {
 		this.ionViewDidEnter();
 		this.ionViewWillLeave();
-				this.checkIp();
+		this.checkIp();
 
 	}
 
@@ -98,11 +93,12 @@ export class DashboardPage implements OnInit {
 				console.log(timeLogLength);
 				var lastRecord = this.filledAttendanceLog[0].timeLog[timeLogLength].out;
 				if(lastRecord != '-'){
-					this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
-					this.entry = false;
-					this.closedata();
+					console.log("the exit is called");
+						this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
+						console.log("the exit of function is ====>", this.exit);
+						this.entry = false;
 				}else{
-					this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
+					this.entry = this.olddateCom.dates; 
 					this.exit = false;
 					console.log("the oldseconds and current seconds diffrence is ====>", this.milseconds);
 					if (localStorage.getItem('olddate')) {
@@ -110,6 +106,9 @@ export class DashboardPage implements OnInit {
 							console.log("the difftime is true");
 						}
 						else {
+							this.exit = this.olddateCom.dates; 
+						console.log("the exit of function is ====>", this.exit);
+						this.entry = false;
 							this.closedata();	
 							this.fillAttendance();
 							console.log("the diffTime is false");
@@ -122,7 +121,7 @@ export class DashboardPage implements OnInit {
 			console.log("error of getCurrentDateLogById ===>" , err);
 		});
 	}
-
+	demo:any;
 	dateStore(){
 		var dateObj = new Date(60 * 1000); 
 		var hours = dateObj.getUTCHours(); 
@@ -151,28 +150,9 @@ export class DashboardPage implements OnInit {
 		}
 	}
 
-	fillAttendance(){
-		if(JSON.parse(localStorage.getItem('currentUser')).loginFlag == true){
-			Swal.fire({
-				title: 'Are you sure?',
-				text: "Mark attendance from unauthorized IP address",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Yes, Mark Attendance!'
-			}).then((result) => {
-				if (result.value) {
-					this.MarkAttendance();
-				}
-			});
-		}
-		else{
-			this.MarkAttendance();
-		}
-	}
 
-	MarkAttendance(){
+
+	fillAttendance(){
 		this._logService.fillAttendance().subscribe((response:any) =>{
 			console.log("response ====>" , response);
 
@@ -205,10 +185,20 @@ export class DashboardPage implements OnInit {
 			var lastRecord = this.filledAttendanceLog[0].timeLog[timeLogLength].out;
 			console.log("the last lastRecord is ====>", lastRecord);
 			if(lastRecord != '-'){
-				this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
-				console.log("the exit of function is ====>", this.exit);
-				this.entry = false;
-				this.closedata();
+				if (this.olddateCom) {
+						console.log("the difftime is true");
+						this.exit = this.olddateCom.dates; 
+						console.log("the exit function true is ====>", this.exit);
+						this.entry = false;
+						this.closedata();
+					}
+					else {
+						this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
+						console.log("the exit of function is ====>", this.exit);
+						this.entry = false;
+						this.closedata();
+						console.log("the diffTime is false");
+					}
 			}else{
 				this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in;
 				console.log("the entry function is ===>", this.entry); 
@@ -231,7 +221,7 @@ export class DashboardPage implements OnInit {
 		secs = Math.abs(secs);
 		return sign + z(secs/3600 |0) + ':' + z((secs%3600) / 60 |0) + ':' + z(secs%60);
 	}
-	
+
 	async opensnack() {
 		const toast = await this._toast.create({
 			message: 'Fill Attendence Successfully.',

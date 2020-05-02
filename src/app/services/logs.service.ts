@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import  { config } from '../config'; 
-// import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -65,40 +64,4 @@ export class LogsService {
     return this._http.get( config.baseApiUrl+"constant-call");
   }
 
-    /*Services called from logs-summary*/
-  getLogsCountByMonthDefault(){
-    var body = {}
-    body['userId'] = JSON.parse(localStorage.getItem('currentUser'))._id;
-    return this._http.post(config.baseApiUrl+"attendance/get-current-month-logs-count" , body);      
-  }
-  getLogsByMonthDefaultByPage(body){
-    if(JSON.parse(localStorage.getItem('currentUser')).userRole ){
-      body['userRole'] = JSON.parse(localStorage.getItem('currentUser')).userRole;
-    }
-    body['userId'] = JSON.parse(localStorage.getItem('currentUser'))._id;
-    return this._http.post( config.baseApiUrl+"attendance/get-current-month-logs-by-page" , body);      
-  }
-  getLogsReportById(body){
-    console.log(body);
-    return this._http.post( config.baseApiUrl+"attendance/get-report-by-id" , body);      
-  }
-
-  //admin functions
-  getTodaysAttendance(){
-    var body = {
-      "branch" : localStorage.getItem('branchSelected')
-    }
-    console.log("body in service " , body);
-    return this._http.post( config.baseApiUrl+"attendance/get-todays-day-logs" , body);
-  }
-  getLogsBySingleDate(data){
-    console.log(data);
-    data['branch'] = localStorage.getItem('branchSelected');
-    return this._http.post(config.baseApiUrl+"attendance/get-logs-by-single-date" , data);
-  }
-  getReportFlagWise(body){
-    console.log(body);
-    body['branch'] = localStorage.getItem('branchSelected');
-    return this._http.post( config.baseApiUrl+"attendance/get-report-by-flag" , body);
-  }
 }

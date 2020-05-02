@@ -1,17 +1,14 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu contentId="main-content" type="overlay" class="demo">
       <ion-header>
-      <ion-list-header>
-        <img src="assets/icon/raoinfotech-logo-small.png" class="m-auto pt-3 pb-4" width="100">
-      </ion-list-header>
-      <div class="text-center mb-5">raoinformation@gmail.com</div>
-    </ion-header>
+        <ion-list-header>
+          <img src="assets/icon/raoinfotech-logo-small.png" class="m-auto pt-5 pb-4" width="100">
+        </ion-list-header>
+        <div class="text-center mb-5">raoinformation@gmail.com</div>
+      </ion-header>
       <ion-content>
         <ion-list id="inbox-list">
-          <!-- <ion-list-header>Inbox</ion-list-header> -->
-          <!-- <ion-note>hi@ionicframework.com</ion-note> -->
-
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
@@ -23,70 +20,32 @@
               <ion-icon slot="start" icon="exit-outline"></ion-icon>
               <ion-label>logout</ion-label>
             </ion-item>
-</ion-menu-toggle>
+          </ion-menu-toggle>
         </ion-list>
       </ion-content>
+      <ion-footer>
+        <ion-toolbar>
+          <div class="footer">
+            <div class="footer-social">
+              <div class="container">
+                <div class="row">
+                  <div class="col-4">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                  </div>
+                  <div class="col-4">
+                    <ion-icon name="logo-twitter"></ion-icon>
+                  </div>
+                  <div class="col-4">
+                    <ion-icon name="globe"></ion-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-toolbar>
+      </ion-footer>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>
 
-
-<!--  <ion-app>
-  <ion-menu side="start" menuId="first" contentId="content1">
-    <ion-header>
-      <ion-list-header>
-        <img src="assets/icon/raoinfotech-logo-small.png" class="m-auto pt-3 pb-4" width="100">
-      </ion-list-header>
-      <div class="text-center mb-5">raoinformation@gmail.com</div>
-    </ion-header>
-    <ion-content>
-      <ion-list *ngFor="let pages of navigate">
-        <ion-menu-toggle auto-hide="true">
-          <ion-item [routerLink]="pages.url" routerDirection="forward">
-            <ion-icon [name]="pages.icon" slot="start"></ion-icon>
-            {{pages.title}} 
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
-        <ion-menu-toggle auto-hide="true">
-          <ion-item (click)="logout()" class="logout">
-            <ion-icon icon="exit-outline" slot="start"></ion-icon>
-            Logout
-          </ion-item>
-        </ion-menu-toggle>
-    </ion-content>
-  </ion-menu>
-  <ion-router-outlet id="content1"></ion-router-outlet>
-</ion-app> -->
-
-
-<!-- <ion-app>
-  <ion-menu side="start">
-    <ion-header>
-      <ion-list-header>
-        <img src="assets/icon/raoinfotech-logo-small.png" class="m-auto pt-3 pb-4" width="100">
-      </ion-list-header>
-      <div class="text-center mb-5">raoinformation@gmail.com</div>
-    </ion-header>
-
-    <ion-content>
-      <ion-list>
-        <ion-menu-toggle>
-          <ion-item lines="none" routerLink="">
-            <ion-icon name="analytics" slot="start"></ion-icon>
-            <ion-label>Dashboard</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle>
-          <ion-item lines="none" (click)="logout()" button>
-            <ion-icon name="exit-outline" slot="start"></ion-icon>
-            <ion-label>Logout</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
-
-  <ion-router-outlet main></ion-router-outlet>
-</ion-app> -->

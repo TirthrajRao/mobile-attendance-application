@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'logs-summary',
     loadChildren: () => import('./pages/logs-summary/logs-summary.module').then( m => m.LogsSummaryPageModule)
+  },
+  {
+    path: 'user-profile/:id',
+    loadChildren: () => import('./pages/user-profile/user-profile.module').then( m => m.UserProfilePageModule)
   }
 ];
 

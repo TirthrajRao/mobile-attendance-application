@@ -161,3 +161,9 @@ ion-content.ios ion-title {
 .logout {
   cursor: pointer;
 }
+
+ion-content{
+  background: -webkit-linear-gradient( 135deg, rgb(101, 84, 241) 0%, 
+        rgb(21, 209, 229) 35%, 
+        rgb(243, 120, 239) 100%) !important;
+}
