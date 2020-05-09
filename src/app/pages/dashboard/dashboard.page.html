@@ -10,10 +10,9 @@
 </ion-header>
 
 <ion-content color="primary">
-	<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+	<!-- <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
 		<div class="container-fluid">
 			<div class="header-body">
-				<!-- Card stats -->
 				<div class="row m-auto">
 					<div class="col-xl-4 col-lg-6 " *ngIf="!userInfo.userRole || userInfo.userRole == 'employee'">
 						<div class="card card-stats mb-4">
@@ -21,14 +20,9 @@
 								<div class="row">
 									<div class="col">
 										<p class="card-title text-uppercase text-muted mb-1">Fill Attendance</p>
-										<span *ngIf="!filledAttendanceLog" class="h6 font-weight-bold mb-2 text-danger">You are left with your today's attendance !!!</span>
-										<span *ngIf="filledAttendanceLog && entry" class="h6 font-weight-bold mb-2 text-success">You filled your attendance</span>	
-										<span *ngIf="filledAttendanceLog && exit" class="h6 font-weight-bold mb-2 text-danger">Start the time log if you wish to work again !!!</span>	
-									</div>
-									<div class="col-auto">
-										<div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-											<i class="fas fa-chart-bar"></i>
-										</div>
+										<p *ngIf="!filledAttendanceLog" class=" text-danger">You are left with your today's attendance !!!</p>
+										<p *ngIf="filledAttendanceLog && entry" class="mb-2 text-success">You filled your attendance</p>	
+										<p *ngIf="filledAttendanceLog && exit" class="h6 mb-2 text-danger">Start the time log if you wish to work again !!!</p>	
 									</div>
 								</div>
 								<div style="position: absolute; bottom: 10px;">
@@ -54,7 +48,6 @@
 								</div>
 							</div>
 							<div class="table-responsive">
-								<!-- Projects table -->
 								<table class="table align-items-center table-flush">
 									<thead class="thead-light">
 										<tr>
@@ -64,7 +57,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<ng-container>
+										<ng-container> -->
 										<!-- <tr *ngFor="let data of fiveDaysLogs ; let i = index">
 											<th scope="row">
 												{{ data.date }}
@@ -76,7 +69,7 @@
 												{{data.diffrence}}
 											</td>
 										</tr> -->
-										<div id="clock"></div>
+										<!-- <div id="clock"></div>
 										<tr *ngFor="let data of dates ; let i = index">
 											<td scope="row">
 												12/04/2020
@@ -96,9 +89,9 @@
 				</div>
 			</div>
 		</div>		
-	</div>
+	</div> -->
 	<!-- Footer -->
-	<footer class="footer text-center mt-4">
+	<!-- <footer class="footer text-center mt-4">
 		<div class="row align-items-center justify-content-xl-between">
 			<div class="col-xl-6">
 				<div class="copyright text-center text-xl-left text-muted">
@@ -108,4 +101,87 @@
 		</div>
 	</footer>
 </div>
+-->
+<div class="header pt-5">
+	<ion-card (click)="fillAttendance()" class="m-3" style="height: 132px; ">
+		<ion-card-header>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col p-0">
+						<ion-card-subtitle>
+							<p class="h6 card-title text-uppercase text-muted mb-1">Fill Attendance</p>
+							<p *ngIf="!filledAttendanceLog" class="h6 text-danger">You are left with your today's attendance !!!</p>
+							<p *ngIf="filledAttendanceLog && entry" class="h6 card-text text-success">You filled your attendance</p>	
+							<p *ngIf="filledAttendanceLog && exit" class="h6 card-text  text-danger">Start the time log if you wish to work again !!!</p>
+						</ion-card-subtitle>
+					</div>
+					<!-- <div class="col-auto mt-4">
+						<div class="icon icon-shape text-white rounded-circle shadow" style="width: 45px; height: 45px; position: relative; background-color: red">
+							<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR0l55e_wzLcVcBzah-9c73kvkA8SD3R5WPNDrLrQl8iUBEUdvs&usqp=CAU" class="pt-2 mt-1 ml-3" width="22" style="position: absolute;">
+						</div>
+					</div> -->
+				</div>
+			</div>
+		</ion-card-header>
+
+		<ion-card-content>
+			<p class="cart-footer-text mb-0 mt-3 text-muted text-sm" *ngIf="entry">
+				<span class="text-nowrap">Your Entry Time :</span>
+				<span class="text-success mr-2"> {{entry}} </span>
+			</p>
+			<p class="cart-footer-text mb-0 text-muted text-sm" *ngIf="exit">
+				<span class="text-nowrap">Your Exit Time :</span>
+				<span class="text-danger mr-2"> {{exit}} </span>
+			</p>
+		</ion-card-content>
+	</ion-card>
+
+	<ion-card class="mt-5 m-3" >
+		<ion-card-header>
+			<ion-card-subtitle>
+				<h5 class="mb-0 text-muted">Week Summary </h5>
+
+			</ion-card-subtitle>
+		</ion-card-header>
+
+		<ion-card-content class="p-0">
+			<div class="table-responsive">
+				<table class="table align-items-center table-flush">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col">Date</th>
+							<th scope="col">day</th>
+							<th scope="col">Hr Worked</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ng-container>
+							<div id="clock"></div>
+							<tr *ngFor="let data of dates ; let i = index">
+								<td scope="row">
+									12/04/2020
+								</td>
+								<td>
+									Monday
+								</td>
+								<td>
+									{{data.dates}}
+								</td>
+							</tr>
+						</ng-container>
+					</tbody>
+				</table>
+			</div>
+		<!-- <p class="cart-footer-text mb-0 mt-3 text-muted text-sm" *ngIf="entry">
+			<span class="text-nowrap">Your Entry Time :</span>
+			<span class="text-success mr-2"> {{entry}} </span>
+		</p>
+		<p class="cart-footer-text mb-0 text-muted text-sm" *ngIf="exit">
+			<span class="text-nowrap">Your Exit Time :</span>
+			<span class="text-danger mr-2"> {{exit}} </span>
+		</p> -->
+	</ion-card-content>
+</ion-card>
+</div>
+<!-- </div> -->
 </ion-content>

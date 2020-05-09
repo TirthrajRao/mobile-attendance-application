@@ -1,0 +1,206 @@
+.main-content {
+    position: relative;
+    width: calc( 100% - 250px);
+    float: right;
+ }
+.emp-profile{
+    padding: 3%;
+    position: relative;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+.profile-edit-btn{
+    border: none;
+    border-radius: 1.5rem;
+    width: 70%;
+    padding: 2%;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+}
+.profile-head .nav-tabs{
+    margin-bottom:5%;
+}
+.profile-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+    text-align: center;
+}
+.profile-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #0062cc;
+    text-align: center;
+}
+.user_profile {
+    color: #8898aa;
+    background: #f6f9fc;
+}
+.pass_text{
+    font-size: 13px;
+}
+
+
+
+
+
+/*.main-timeline-section{
+  position: relative; 
+  width: 100%;  
+  margin:auto; 
+  height:450px;
+}
+.main-timeline-section .timeline-start,
+.main-timeline-section .timeline-end{
+  position: absolute;
+  background:#6a6ce4;
+  border-radius:100px;
+  top:50%;
+  transform: translateY(-50%);
+  width:30px;
+  height:30px;
+}
+.main-timeline-section .timeline-end{
+  right:0px;
+}
+.main-timeline-section .conference-center-line{
+  position: absolute;
+  width:100%;
+  height:5px;
+  top:50%;
+  transform: translateY(-50%);
+  background:#6a6ce4;
+}
+.timeline-article{
+    width: 20%;
+    position: relative;
+    min-height: 450px;
+    float:right;
+}
+.timeline-article .content-date{
+    position: absolute;
+    top: 35%;
+    left: -30px; 
+    font-size:18px;
+}
+.timeline-article .meta-date{
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    transform: translateY(-50%); 
+    width:20px;
+    height:20px;
+    border-radius: 100%;
+    background:#6a6ce4;
+    border:1px solid #6a6ce4;
+}
+.timeline-article .content-box{
+  box-shadow: 1px 0px 5px 0px black;
+  border:1px solid #6a6ce4;
+  border-radius: 5px;
+  background-color: #6a6ce4;
+  width: 180px;
+  color: white;
+  position: absolute;
+  top: 65%;
+  left: -80px; 
+  padding:10px;
+}
+.timeline-article-top .content-box:before{
+  content: " ";
+  position:absolute; 
+  left:50%;
+  transform: translateX(-50%);
+  top:-20px;
+  border:10px solid transparent;
+  border-bottom-color: #6a6ce4;
+}
+.timeline-article-bottom .content-date{
+  top: 59%;
+}
+.timeline-article-bottom .content-box{
+  top: 0%;
+}
+.timeline-article-bottom .content-box:before{
+  content: " ";
+  position:absolute; 
+  left:50%;
+  transform: translateX(-50%);
+  bottom:-20px;
+  border:10px solid transparent;
+  border-top-color:#6a6ce4;
+}
+
+
+@media (max-width:460px){
+  body{
+    display: none;
+  }
+}*/
+
+
+
+
+ body {
+   background: #ccc;
+}
+ .timeline-wrapper {
+   display: block;
+   width: 90%;
+   height: 15rem;
+   position: relative;
+   color: #fff;
+   text-align: center;
+   margin: 0 auto;
+}
+ .timeline-wrapper .timeline-line {
+   display: block;
+   width: 93.9%;
+   height: 1px;
+   background: white;
+   position: absolute;
+   top: 50%;
+   -webkit-box-shadow: 0 0 1px black;
+   -moz-box-shadow: 0 0 1px black;
+   box-shadow: 0 0 1px black;
+   left: 3%;
+   margin-left: 2.5px;
+}
+ .timeline-wrapper .timeline-content-item .timeline-content-item-reveal a img {
+   -moz-border-radius: 50%;
+   -webkit-border-radius: 50%;
+   border-radius: 50%;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   max-height: 100%;
+   max-width: 100%;
+   border: 3px solid white;
+   -webkit-box-shadow: 0 0 2px black;
+   -moz-box-shadow: 0 0 2px black;
+   box-shadow: 0 0 2px black;
+}
+ .timeline-wrapper .timeline-content-item .timeline-content-item-reveal a span {
+   position: absolute;
+   width: 250%;
+   margin-left: -75%;
+   bottom: -2rem;
+   left: 0;
+   font-family: serif;
+   font-size: 1.3em;
+   font-style: italic;
+   text-decoration: none;
+   white-space: nowrap;
+   color: white;
+   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5), 0 0 1px black;
+}
+ .timeline-wrapper .timeline-content-item .timeline-content-item-reveal a span:after {
+   content: "\203A";
+   margin-left: 0.3em;
+}
+ .timeline-wrapper .timeline-content-item.active {
+   width: 10%;
+}
+ .timeline-wrapper .timeline-content-item.active .timeline-content-item-reveal {
+   display: block;
+}

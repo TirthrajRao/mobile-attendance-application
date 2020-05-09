@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, NavController, ActionSheetController, ToastController, LoadingController } from '@ionic/angular';
+import { Platform, NavController, ActionSheetController, ToastController, LoadingController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
@@ -11,7 +11,7 @@ import { IonRouterOutlet } from '@ionic/angular';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  styleUrls: ['app.component.scss'],
 })
 
 export class AppComponent implements OnInit {
@@ -27,16 +27,6 @@ export class AppComponent implements OnInit {
     url: '',
     icon: 'home'
   },
-  {
-    title: 'Logs-Summary',
-    url: '/logs-summary',
-    icon: 'paper-plane'
-  },
-  {
-    title: 'User-Profile',
-    url: '/user-profile',
-    icon: 'person'
-  },
   ];
   
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -50,10 +40,10 @@ export class AppComponent implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     private toast: ToastController,
     private loginService: LoginService,
-    private _loadingController: LoadingController
+    private _loadingController: LoadingController,
+    public alertController: AlertController
     )  {
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
-    // this.sideMenu();
     this.initializeApp();
     
     this.loginService.isLoggedIn.subscribe((data) => {
@@ -73,7 +63,6 @@ export class AppComponent implements OnInit {
       console.log("called 2nd time");
       console.log(this.userInfo);
       this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
-      // this._router.navigate(['']);
       this._loadingController.create({
         message: ''
       }).then((overlay) => {
@@ -123,5 +112,10 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('olddate');
     localStorage.removeItem('date');
+  }
+
+  userProfile(){
+    console.log("the user id is : ======>", this.userInfo._id);
+    this._router.navigate(['user-profile', this.userInfo._id])
   }
 }

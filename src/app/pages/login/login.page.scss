@@ -14,7 +14,7 @@ h1 {
 
 .login_bg {
 	width: 100vw;
-	height: 100vh;
+	height: 100%;
 	position: absolute;
 }
 
@@ -39,4 +39,8 @@ ion-item {
 
 .sa{
 	background-color: grey;
+}
+
+.form-control {
+	border-radius: 50px;
 }

@@ -9,4 +9,111 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content color="primary">
+	<div class="container-fluid mt-5" *ngIf="edit">
+		<div class="emp-profile">
+			<div class="row">
+				<div class="col-7 pl-4">
+					<h5 *ngIf="userInfo" style="color: black">
+						{{edit.name}}
+					</h5>
+					<h6 class="mb-6" *ngIf="userInfo" style="color: black">
+						{{edit.designation}}
+					</h6>
+				</div>
+				<div class="col-5">
+					<p class="text-center">
+						<button class="btn btn-sm btn-primary profile-edit-btn p-2 text-white" type="submit" (click)="editProfile()" value="Edit Profile">Edit Profile</button>
+					</p>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-xl-12" *ngIf="userInfo.userRole == 'employee'">
+					<div class="profile-head">
+						<ul class="nav nav-tabs row" id="myTab" role="tablist"> 
+							<li class="col-6 nav-item">
+								<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+							</li>
+							<li class="col-6 nav-item">
+								<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile">Timeline</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="tab-content" id="myTabContent" *ngIf="edit">
+				<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+					<div class="row">
+						<div class="col-xl-12">
+							<form [formGroup]="myForm">
+								<div class="row mt--4">
+									<div class="col-xl-6">
+										<div class="form-group">
+											<label>E-mail : </label>
+											<div class="input-group input-group-merge input-group-alternative">
+												<input class="form-control user_profile" formControlName="email" [(ngModel)]="edit.email" placeholder="E-mail" type="text" readOnly>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-6">
+										<div class="form-group">
+											<label>Name : </label>
+											<div class="input-group input-group-merge input-group-alternative">
+												<input class="form-control user_profile" formControlName="name" [(ngModel)]="edit.name" placeholder="Name" type="text" readOnly>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-6">
+										<div class="row">
+											<div class="col-6">
+												<div class="form-group">
+													<label>Password : </label>
+													<div class="input-group input-group-merge input-group-alternative">
+														<input class="form-control user_profile" formControlName="password" [(ngModel)]="edit.password" placeholder="password" [type]="password" readonly>
+														<button class="btn btn-icon btn-default"  (click)="viewPass()" >
+															<i class="fa fa-eye" aria-hidden="true" *ngIf="show"></i>
+															<i class="fa fa-eye-slash" aria-hidden="true" *ngIf="!show"></i> 
+														</button>
+													</div>
+												</div>		
+											</div>
+											<div class="col-6">
+												<div class="form-group">
+													<label>Designation : </label>
+													<div class="input-group input-group-merge input-group-alternative">
+														<input class="form-control user_profile" formControlName="designation" placeholder="Designation" [(ngModel)]="edit.designation" type="text" readOnly>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-6">
+										<div class="row">
+											<div class="col-6">
+												<div class="form-group">
+													<label>User Role : </label>
+													<div class="input-group input-group-merge input-group-alternative">
+														<input class="form-control user_profile" formControlName="userRole" [(ngModel)]="edit.userRole" placeholder="User Role" type="text" readOnly>
+													</div>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="form-group">
+													<label>Branch : </label>
+													<div class="input-group input-group-merge input-group-alternative">
+														<input class="form-control user_profile" formControlName="branch" [(ngModel)]="edit.branch" placeholder="branch" type="text" readOnly>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</ion-content>

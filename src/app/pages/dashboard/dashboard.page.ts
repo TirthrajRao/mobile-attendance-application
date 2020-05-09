@@ -1,4 +1,4 @@
-import { Component, OnInit, Output , Input , ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output , Input, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Platform, NavController, LoadingController, ToastController } from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
@@ -6,6 +6,7 @@ import { interval, Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import Swal from 'sweetalert2';
 import { LoginService } from 'src/app/services/login.service';
+import { AlertController } from '@ionic/angular';
 import * as moment from 'moment';
 declare var $;
 declare var require: any;
@@ -40,24 +41,18 @@ export class DashboardPage implements OnInit {
 	alldate = {
 		dates: ""
 	}
+	timeflag
+
 	subscribe:any;
 	private loading;
 
-	constructor(
-		private _logService: LogsService,
-		private _router: Router,
-		private platform: Platform,
-		public _loginService: LoginService,
-		private _loadingController: LoadingController,
-		private _navCtrl: NavController,
-		public _toast: ToastController
+	constructor(private _logService: LogsService, private _router: Router, private platform: Platform, public _loginService: LoginService,
+		private _loadingController: LoadingController, private _navCtrl: NavController, public _toast: ToastController, public alertController: AlertController
 		) { 
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		if(!this.userInfo){
 			this._router.navigate(['/login']);
 		}
-
-		this.dateStore();
 
 		if(this.userInfo.userRole != 'admin'){
 			this.getCurrentDateLogById();
@@ -76,8 +71,6 @@ export class DashboardPage implements OnInit {
 	ngOnInit() {
 		this.ionViewDidEnter();
 		this.ionViewWillLeave();
-		this.checkIp();
-
 	}
 
 	getCurrentDateLogById(){
@@ -93,26 +86,22 @@ export class DashboardPage implements OnInit {
 				console.log(timeLogLength);
 				var lastRecord = this.filledAttendanceLog[0].timeLog[timeLogLength].out;
 				if(lastRecord != '-'){
-					console.log("the exit is called");
-						this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
-						console.log("the exit of function is ====>", this.exit);
-						this.entry = false;
+					this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
+					this.entry = false;
+					this.closedata();
 				}else{
-					this.entry = this.olddateCom.dates; 
-					this.exit = false;
 					console.log("the oldseconds and current seconds diffrence is ====>", this.milseconds);
-					if (localStorage.getItem('olddate')) {
-						if (this.timeString > this.milseconds) {
-							console.log("the difftime is true");
-						}
-						else {
-							this.exit = this.olddateCom.dates; 
-						console.log("the exit of function is ====>", this.exit);
-						this.entry = false;
-							this.closedata();	
-							this.fillAttendance();
-							console.log("the diffTime is false");
-						}
+					this.dateStore();
+					if (this.timeString < this.milseconds) {
+						console.log("the difftime is true");
+						this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
+						this.exit = false;
+						this.fillAttendance();
+					}
+					else {
+						this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
+						this.exit = false;	
+						console.log("the diffTime is false");
 					}
 					this.opensnack();
 				}
@@ -121,7 +110,7 @@ export class DashboardPage implements OnInit {
 			console.log("error of getCurrentDateLogById ===>" , err);
 		});
 	}
-	demo:any;
+
 	dateStore(){
 		var dateObj = new Date(60 * 1000); 
 		var hours = dateObj.getUTCHours(); 
@@ -185,21 +174,20 @@ export class DashboardPage implements OnInit {
 			var lastRecord = this.filledAttendanceLog[0].timeLog[timeLogLength].out;
 			console.log("the last lastRecord is ====>", lastRecord);
 			if(lastRecord != '-'){
-				if (this.olddateCom) {
-						console.log("the difftime is true");
-						this.exit = this.olddateCom.dates; 
-						console.log("the exit function true is ====>", this.exit);
-						this.entry = false;
-						this.closedata();
-					}
-					else {
-						this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
-						console.log("the exit of function is ====>", this.exit);
-						this.entry = false;
-						this.closedata();
-						console.log("the diffTime is false");
-					}
-			}else{
+				if (this.timeflag == true) {
+					this.exit = this.olddateCom.dates; 
+					console.log("the exit of function is ====>", this.exit);
+					this.entry = false;
+					this.closedata();
+				}
+				else {
+					this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
+					console.log("the exit of function is ====>", this.exit);
+					this.entry = false;
+					this.closedata();
+				}
+			}
+			else {
 				this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in;
 				console.log("the entry function is ===>", this.entry); 
 				this.exit = false;
@@ -272,35 +260,15 @@ export class DashboardPage implements OnInit {
 		});
 	}
 
-	checkIp(){
-		console.log("hye in check");
-		this._loginService.getIpCliente().subscribe((response)=>{
-		},(err)=>{
-			console.log("this --------------> ",err);
-			if(err.error.text == '119.160.195.171' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
-				this.loginFlag = true;
-				this.userInfo['loginFlag'] = true;
-				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
-				// alert(err.error.text + " --> Valid IP");	
-			}
-			else{	
-				this.loginFlag = false;
-				this.userInfo['loginFlag'] = false;
-				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
-				// alert(err.error.text + " ---> Invalid IP");
-			}
-		});
-	}
-
 	ionViewDidEnter(){
 		this.subscription = this.platform.backButton.subscribe(()=>{
 			navigator['app'].exitApp();
 		});
+
+
 	}
 
 	ionViewWillLeave(){
 		this.subscription.unsubscribe();
 	}
-
-
 }

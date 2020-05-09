@@ -9,4 +9,76 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+	<div class="header pt-5">
+		<ion-card>
+			<ion-card-header>
+				<ion-card-subtitle>
+					<div class="input-group bg-white input-group-alternative">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><ion-icon name="calendar"></ion-icon></span>
+						</div>
+						<input style="cursor: pointer;" readonly class="form-control" id="reportrange" placeholder="Search Record" type="text" value="---">
+					</div>
+				</ion-card-subtitle>
+			</ion-card-header>
+
+			<ion-card-content class="p-0">
+				<div class="table-responsive">
+					<table class="table justify-content-center" style="box-shadow: 10px">
+						<thead class="thead-light">
+							<tr>
+								<th *ngIf="userInfo.userRole == 'admin'" scope="col">Name</th>
+								<th scope="col">Date</th>
+								<th scope="col">day</th>
+								<th scope="col">Hr worked</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container *ngFor="let data of logs  | paginate:{itemsPerPage: 7, currentPage:p}; let i = index">
+								<tr  *ngIf="data.message" [ngStyle]="{'background-color':getBackGroundColorSingleEmployee(data.message) , 'color' : getColorSingleEmployee(data.message)}">
+									<td  >{{data.date}}</td>
+									<td colspan="3" align="center">{{data.message}}</td>
+								</tr>
+								<tr  *ngIf="!data.message && data.seconds"  style="border-left: 6px solid red; margin-top: 1px" [ngStyle]="{'background-color':getBackGroundColorSingleEmployee(data.seconds) , 'color' : getColorSingleEmployee(data.seconds)}">
+									<th scope="row" class="nameClick" *ngIf="userInfo.userRole == 'admin'" [routerLink]="['/all-users/user-detail/' ,data.user[0]._id]">
+										{{ data.user[0].name }}
+									</th>
+									<td scope="row">
+										{{ data.date }}
+									</td>
+									<td>
+										{{data.day}}
+									</td>
+									<td>
+										{{data.diffrence}}
+									</td>
+								</tr>
+								<tr  *ngIf="!data.message && !data.seconds">
+									<th scope="row" class="nameClick" *ngIf="userInfo.userRole == 'admin'" [routerLink]="['/all-users/user-detail/' ,data.user[0]._id]">
+										{{ data.user[0].name }}
+									</th>
+									<th scope="row">
+										{{ data.date }}
+									</th>
+									<td>
+										{{data.day}}
+									</td>
+									<td>
+										{{data.diffrence}}
+									</td>
+								</tr>
+							</ng-container>
+						</tbody>
+					</table>
+					<div scope="row" *ngIf="logs == '' ? true : false">
+						<h3 class="text-center p-2">{{totalHoursToEmp}}</h3>
+					</div>   
+				</div>
+				<div class="card-footer py-3 bg-white">
+					<pagination-controls   (pageChange)="p=$event"></pagination-controls>
+				</div>
+			</ion-card-content>
+		</ion-card>
+	</div>
+</ion-content>
