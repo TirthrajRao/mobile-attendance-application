@@ -41,7 +41,7 @@ export class DashboardPage implements OnInit {
 	alldate = {
 		date: "",
 		day: "",
-		dates: ""
+		lastLog: ""
 	}
 	timeflag
 
@@ -130,7 +130,7 @@ export class DashboardPage implements OnInit {
 
 			var datesCurrent = moment().format("LTS");
 			console.log("the dates demo is ====>", datesCurrent);
-			var start = moment.utc(this.olddateCom.dates, "hh:mm:ss");
+			var start = moment.utc(this.olddateCom.lastLog, "hh:mm:ss");
 			var end = moment.utc(datesCurrent, "hh:mm:ss");
 			var dateDiffrence = moment.duration(end.diff(start));
 			console.log("the date dateDiffrence is the ==============>", dateDiffrence);
@@ -176,7 +176,7 @@ export class DashboardPage implements OnInit {
 			console.log("the last lastRecord is ====>", lastRecord);
 			if(lastRecord != '-'){
 				if (this.timeflag == true) {
-					this.exit = this.olddateCom.dates; 
+					this.exit = this.olddateCom.lastLog; 
 					console.log("the exit of function is ====>", this.exit);
 					this.entry = false;
 					this.closedata();
@@ -214,7 +214,7 @@ export class DashboardPage implements OnInit {
 				if (err.status == 200) {
 					this.alldate.date = moment(). format('DD/MM/YYYY');
 					this.alldate.day = moment().format('dddd'); 
-					this.alldate.dates = moment().format("h:mm:ss a");
+					this.alldate.lastLog = moment().format("h:mm:ss a");
 					console.log("the alldate", this.alldate);
 					localStorage.setItem('olddate', JSON.stringify(this.alldate));
 

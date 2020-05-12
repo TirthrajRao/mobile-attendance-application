@@ -33,7 +33,7 @@ export class LogsService {
   }
   
   fillAttendance(){
-    if (localStorage.getItem('olddate') == null) {
+    if (JSON.parse(localStorage.getItem('olddate')) == null) {
     this.body = {
       userId : JSON.parse(localStorage.getItem('currentUser'))._id,
       loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,  
@@ -41,15 +41,16 @@ export class LogsService {
       console.log("Body Of Fill attendace true",  this.body); 
     }
     else {
-      console.log("the currentTime is the date is =====>", this.currentTime.date);
+      this.currentTime = JSON.parse(localStorage.getItem('olddate'));
       if (this.lastDate === this.currentTime.date) {
+      console.log("the currentTime is the date is =====>", this.currentTime.date);
       this.body = {
       userId : JSON.parse(localStorage.getItem('currentUser'))._id,
       loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,  
-      lastLog: JSON.parse(localStorage.getItem('olddate')).dates,
+      lastLog: JSON.parse(localStorage.getItem('olddate')).lastLog,
       }
-    }
       console.log("Body Of Fill attendace false",  this.body); 
+    }
     }
     return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/fill-attendance" , this.body);	
   }

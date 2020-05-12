@@ -27,6 +27,10 @@ export class AppComponent implements OnInit {
     url: '',
     icon: 'home'
   },
+  {
+    title: 'Logs-Summary',
+    url: 'logs-summary',
+  }
   ];
   
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
