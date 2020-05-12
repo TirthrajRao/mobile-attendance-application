@@ -21,7 +21,6 @@ export class LogsSummaryPage implements OnInit {
 	modelValue : any ;
 	p: number = 1;
 
-	//imported
 	data = {
 		firstDate : "",
 		secondDate : "",
@@ -83,25 +82,16 @@ export class LogsSummaryPage implements OnInit {
 				cb(start, end);
 
 			});
-			$('[data-toggle="tooltip"]').tooltip();   
-			
-
+			// $('[data-toggle="tooltip"]').tooltip();   
 		});
-
-		// this.getLogsCountByMonthDefault();
 		
 		if(this.userInfo.userRole == 'admin'){
-			this.getTodaysAttendance();
 			this.search = false;
-			// this.page(1);
 		}
-
-
 	}
-	// ADMIN FUNCTION
+
 	getLogsCountByMonthDefault(){
 		this._logService.getLogsCountByMonthDefault().subscribe((response: any) => {
-			// this.currentMonthLogs = response;
 			console.log("responde ---->" , response);
 			let count = 1;
 			while(response['length'] >= 1){
@@ -116,93 +106,13 @@ export class LogsSummaryPage implements OnInit {
 			console.log("err of getLogsByMonthDefault ==>" , err);
 		});
 	}
-	openModel(index){
-		console.log("hey" , index);
-		this.modelValue = this.logs[index];
-		$('#myModal').modal('show');
-	}
-	
-	logout() {
-		console.log("logiut ccalled");
-		this._loginService.logout();
-		this.router.navigate(['login']);
-	}
-	hello = [];
-	allEmployees = {
-		"diffrence": ""
-	};
 
-	getRecord(){
-		this.flag = true;
-		console.log("this.data;" , this.data);
-		this.previousData = this.data;
-		//find only first date . 
-		if(this.data.firstDate){
-			console.log(" this.data.firstDate " , this.data.firstDate);
-			this.previousData = this.data;
-			this._logService.getLogsBySingleDate(this.data).subscribe(res =>{
-				this.logs = res;
-
-				// this.logs = this.properFormatDate(res);
-				// this.currentMonthLogs = this.properFormatDate(res);
-				// this.currentMonthLogs = res;
-
-				this.searchData = res;
-
-				// if(this.currentMonthLogs.length != 0){
-					// 	this.previousData = false;
-					// }
-					const any = this.logs;
-
-					const sum = any.reduce((acc, time) => acc.add(moment.duration(time)), moment.duration());
-
-					console.log([Math.floor(sum.asHours()), sum.minutes(), sum.seconds()].join(':'));
-
-					if (res == '') {
-						this.totalHoursToEmp = "No Log Found";
-					}
-					else{
-						console.log("the res of null is ====>");
-					}
-					this.flag = false;
-					console.log(res);
-				}, err =>{
-					console.log("the log summery err is ======>",err);
-					this.flag = false;
-				});	
-		}
-	}
-
-
-
-
-	getTodaysAttendance(){
-		this._logService.getTodaysAttendance().subscribe((response:any) => {
-			console.log('getTodaysAttendance response in logs '  , response);
-			// this.currentMonthLogs = this.properFormatDate(response.data);
-			// this.logs = this.properFormatDate(response.data);
-			this.logs = response.data;
-
-
-			this.searchData = response.data;
-
-		} , (err) => {
-			console.log('getTodaysAttendance error'  , err);
-		})	
-	}
-	searchByName(items){
-		var field1 = (<HTMLInputElement>document.getElementById("searchName")).value;
-		console.log("field 1 =====> " , field1 , "current month logs =====>" , this.logs);
-
-		// this.currentMonthLogs = this._filterPipe.transform(items, field1);
-		// this.logs = this._filterPipe.transform(items, field1);
-		console.log("Items  =====> " , items );
-	}
 	resetForm(){
 		this.search = false;
 		this.calculateTotalDuration(this.currentMonthLogs , 5 , moment() , moment().subtract(6, 'days'));
 		(<HTMLInputElement>document.getElementById("reportrange")).value = "";
 	}
+
 	getRangeDate(start, end){
 		console.log("RANGE FUNCTION CALLED");
 		console.log(" date " ,new Date(start._d).toISOString() , new Date(end._d).toISOString());
@@ -228,7 +138,6 @@ export class LogsSummaryPage implements OnInit {
 						objData['seconds'] = moment.duration(objData.diffrence).asSeconds();
 					}
 				});
-				// this.logs = this.properFormatDate(res.foundLogs);
 				this.totalHoursToWork = res.TotalHoursToComplete;
 				this.totalHoursWorked = res.TotalHoursCompleted;
 				console.log("total hours attednent ====>" , this.totalHoursToWork);
@@ -244,10 +153,10 @@ export class LogsSummaryPage implements OnInit {
 			console.log("err of getLogsReportById" , err);
 		});
 	}
+
 	calculateTotalDuration(array , resultHours, start , end){
 		var workingHours = 0;
 		var totalHours = 0;
-		// console.log("start ========+++>" , start._d , "end ==>" , end._d);
 		console.log("result hours =========>" , resultHours);
 		if(resultHours < 1)
 			resultHours = 1	
@@ -255,25 +164,22 @@ export class LogsSummaryPage implements OnInit {
 			console.log(resultHours - i);
 			var local:any = moment(start._d).subtract(i, 'days');
 			local =  moment(local._d , "YYYY-MM-DD HH:mm:ss").format('dddd');
-			// console.log("add date ====>" , moment(start._d).subtract(i, 'days')._d  , "local ady" ,local);
 			if(local.toString() != "Sunday")
 				totalHours = totalHours + 30600; 
 		}
 		array.forEach((obj)=>{
-			// console.log(obj);
 			if(obj.diffrence){
 				workingHours = workingHours + moment.duration(obj.diffrence).asSeconds();
 				console.log("workingHours ====>" , workingHours);
 			}
 		});
-		//calculate total working hours 
+
 		var minutes = Math.floor(totalHours / 60);
 		totalHours = totalHours%60;
 		var hours = Math.floor(minutes/60)
 		minutes = minutes%60;
 		console.log("totalHours ====>" , hours , minutes);
 		this.totalHoursToWork =  hours+":"+minutes+":"+"00";
-		//calculate hours worked 
 
 		var minutes = Math.floor(workingHours / 60);
 		workingHours = workingHours%60;
@@ -285,48 +191,43 @@ export class LogsSummaryPage implements OnInit {
 
 	}
 
-	// searchByName(items){
-		// 	var field1 = (<HTMLInputElement>document.getElementById("nameSearch")).value;
-		// 	this.filteredData = this._filterPipe.transform(items, field1);
-		// }
-		branchSelector(branchName){
-			console.log(branchName);
-			localStorage.setItem('branchSelected' , branchName);
-			this.currentMonthLogs  = null;
-			this.ngOnInit();
-			// console.log("Branch name =====> " , localStorage.getItem('branchSelected'));
-		}
+	branchSelector(branchName){
+		console.log(branchName);
+		localStorage.setItem('branchSelected' , branchName);
+		this.currentMonthLogs  = null;
+		this.ngOnInit();
+	}
 
-		getBackGroundColorSingleEmployee(value){
-			console.log("value of color" , value);
-			if(typeof value != 'string'){
-				if(value < 30600){
-					return  '#ff686810'
-				}else{
-					return  '#00800010'
-				}
+	getBackGroundColorSingleEmployee(value){
+		console.log("value of color" , value);
+		if(typeof value != 'string'){
+			if(value < 30600){
+				return  '#ff686810'
 			}else{
-				if(value == 'Sunday'){
-					return  '#8c8cf366'
-				}else{
-					return  'silver'
-				}
+				return  '#00800010'
 			}
-		}
-		getColorSingleEmployee(value){
-			console.log("VALUE +++++++++++++>", value);
-			if(typeof value != 'string'){
-				if(value < 30600){
-					return  'red'
-				}else{
-					return  'green'
-				}
+		}else{
+			if(value == 'Sunday'){
+				return  '#8c8cf366'
 			}else{
-				if(value == 'Sunday'){
-					return  'blue'
-				}else{
-					return  'black'
-				}
+				return  'silver'
 			}
 		}
 	}
+	getColorSingleEmployee(value){
+		console.log("VALUE +++++++++++++>", value);
+		if(typeof value != 'string'){
+			if(value < 30600){
+				return  'red'
+			}else{
+				return  'green'
+			}
+		}else{
+			if(value == 'Sunday'){
+				return  'blue'
+			}else{
+				return  'black'
+			}
+		}
+	}
+}

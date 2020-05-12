@@ -39,6 +39,8 @@ export class DashboardPage implements OnInit {
 	secondsdata:any = [];
 	timeString:any;
 	alldate = {
+		date: "",
+		day: "",
 		dates: ""
 	}
 	timeflag
@@ -116,7 +118,6 @@ export class DashboardPage implements OnInit {
 		var hours = dateObj.getUTCHours(); 
 		var minutes = dateObj.getUTCMinutes(); 
 		var seconds = dateObj.getSeconds(); 
-
 		this.timeString = hours.toString().padStart(2, '0') + 
 		":" + minutes.toString().padStart(2, '0') 
 		+ ':' + seconds.toString().padStart(2, '0'); 
@@ -211,18 +212,22 @@ export class DashboardPage implements OnInit {
 			}, (err) => {
 				console.log("the error ===>", err.status);
 				if (err.status == 200) {
+					this.alldate.date = moment(). format('DD/MM/YYYY');
+					this.alldate.day = moment().format('dddd'); 
 					this.alldate.dates = moment().format("h:mm:ss a");
 					console.log("the alldate", this.alldate);
 					localStorage.setItem('olddate', JSON.stringify(this.alldate));
 
-					localStorage.setItem('date', JSON.stringify(this.alldate))
-					this.getdate = JSON.parse(localStorage.getItem('date'));
+					// localStorage.setItem('date', JSON.stringify(this.alldate))
+					this.getdate = JSON.parse(localStorage.getItem('olddate'));
 					console.log("the date is ===>", this.getdate);
 
 					this.olddate = this.dates[this.dates.length - 1];
 					console.log("the old date is ====>", this.olddate);
 					this.dates.push(this.getdate);
 					console.log("the dates is ===>", this.dates);   
+					// console.log("the data of  the date is demo of ====================>", this.alldatedemo);
+					// console.log("the dates id is =======================>", this.dates);
 				}
 			})		
 		}, 10000);

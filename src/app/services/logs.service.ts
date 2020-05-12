@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import  { config } from '../config'; 
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +9,17 @@ import  { config } from '../config';
 export class LogsService {
 
   currentTime:any;
+  lastDate:any;
+  body:any;
 
   constructor(public _http: HttpClient,
     ) { 
-    if (localStorage.getItem('olddate')) {
+    this.lastDate = moment(). format('DD/MM/YYYY');
+    console.log("the dates is =======>", this.lastDate);
+    if (JSON.parse(localStorage.getItem('olddate'))) {
       this.currentTime = JSON.parse(localStorage.getItem('olddate'));
       console.log("the currentTime time is ========>", this.currentTime);
+    console.log("the currentTime id the date is ===>", this.currentTime.date);
     }
   }
 
@@ -25,7 +31,7 @@ export class LogsService {
     console.log(body);
     return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-attendance-by-id" , body);	
   }
-  body:any;
+  
   fillAttendance(){
     if (localStorage.getItem('olddate') == null) {
     this.body = {
@@ -35,15 +41,19 @@ export class LogsService {
       console.log("Body Of Fill attendace true",  this.body); 
     }
     else {
+      console.log("the currentTime is the date is =====>", this.currentTime.date);
+      if (this.lastDate === this.currentTime.date) {
       this.body = {
       userId : JSON.parse(localStorage.getItem('currentUser'))._id,
       loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,  
       lastLog: JSON.parse(localStorage.getItem('olddate')).dates,
+      }
     }
       console.log("Body Of Fill attendace false",  this.body); 
     }
     return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/fill-attendance" , this.body);	
   }
+  
   getLastFiveDaysAttendance(id){
     if(id == 0){
       var body = {
@@ -64,7 +74,6 @@ export class LogsService {
     return this._http.get( config.baseApiUrl+"constant-call");
   }
 
-    /*Services called from logs-summary*/
   getLogsCountByMonthDefault(){
     var body = {}
     body['userId'] = JSON.parse(localStorage.getItem('currentUser'))._id;
@@ -80,51 +89,5 @@ export class LogsService {
   getLogsReportById(body){
     console.log(body);
     return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-report-by-id" , body);      
-  }
-
-  //admin functions
-  getTodaysAttendance(){
-    var body = {
-      "branch" : localStorage.getItem('branchSelected')
-    }
-    console.log("body in service " , body);
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-todays-day-logs" , body);
-  }
-  getLogsBySingleDate(data){
-    console.log(data);
-    data['branch'] = localStorage.getItem('branchSelected');
-    return this._http.post("https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-logs-by-single-date" , data);
-  }
-  getReportFlagWise(body){
-    console.log(body);
-    body['branch'] = localStorage.getItem('branchSelected');
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-report-by-flag" , body);
-  }
-
-    getAllUsers(){
-    var body = {
-      'branch' : localStorage.getItem('branchSelected')
-    }
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"user/get-users" , body);  
-  }
-  
-  getUserById(id){
-    console.log("the id is =========>", id);
-    return this._http.get( "https://attendance.raoinformationtechnology.com:4000/"+"user/get-user-by-id/"+id);  
-  }
-
-  getEditById(id, value){
-    console.log("the service data is: ", id, value);
-    return this._http.put( "https://attendance.raoinformationtechnology.com:4000/"+"user/update-user-by-id/"+id,value);  
-  }
-
-  adminAddEmployee(value){
-    console.log("the service data is: ", value);
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"user/signup", value);  
-  }
-
-  adminDelEmployee(id){
-    // console.log("the service del id is:", id);
-    return this._http.delete( "https://attendance.raoinformationtechnology.com:4000/"+"user/delete-user-by-id/"+id);  
   }
 }
