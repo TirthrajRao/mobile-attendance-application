@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { Platform, NavController, LoadingController, ToastController } from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
 import { LoginService } from 'src/app/services/login.service';
+// import { mobiscroll, MbscRangeOptions } from '@mobiscroll/angular';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 
@@ -37,9 +39,11 @@ export class LogsSummaryPage implements OnInit {
 	allEmployeesLogs : any = [];
 	absentEmp:any = [];
 	totalEmployees:any;
+	toDate:any;
+	fromDate:any;
 
 	constructor(public _logService: LogsService , private route: ActivatedRoute,
-		private router: Router , public _loginService: LoginService , private http: HttpClient,
+		private router: Router , public _loginService: LoginService , private http: HttpClient,public _toast: ToastController
 		) { }
 
 	ngOnInit() {
@@ -47,6 +51,37 @@ export class LogsSummaryPage implements OnInit {
 		var branchName = localStorage.getItem('branchSelected');
 		var self = this;
 		$(document).ready(() => {
+
+			this.toDate = $('#example1').datepicker({
+				format: "dd/mm/yyyy",
+				autoclose: true
+			}).on('change', function(){
+				$('#example1').val();
+				var element = <HTMLInputElement> document.getElementById("example2");
+
+				if($('#example1').val()) {
+					element.disabled = false;
+				}
+				else {
+					element.disabled = true;	
+					const toast = this._toast.create({
+			message: 'Fill Attendence Successfully.',
+			duration: 2000
+		})
+		toast.present();
+				}
+			});
+
+			var element = <HTMLInputElement> document.getElementById("example2");
+			element.disabled = true;
+
+			this.fromDate = $('#example2').datepicker({
+				format: "dd/mm/yyyy",
+				autoclose: true
+			}).on('change', function(){
+				$('#example2').val();
+			});						   	
+
 			if(branchName == 'rajkot'){
 
 				$("#rajkot").addClass( "active");
@@ -57,10 +92,20 @@ export class LogsSummaryPage implements OnInit {
 				$("#rajkot").removeClass("active");
 			}
 
-			$('.input-daterange input').each(function() {
-				$(this).datepicker('clearDates');
-			});
-		})
+			$(function() {
+
+				var start = moment().startOf('month');
+				var end = moment().endOf('month');
+
+				function cb(start, end) {
+					if(self.userInfo.userRole != 'admin')
+						self.getRangeDate(start, end);
+				}
+
+				cb(start, end);
+			})
+		});
+
 		if(this.userInfo.userRole == 'admin'){
 			this.search = false;
 		}
