@@ -15,10 +15,11 @@
 			<ion-card-header>
 				<ion-card-subtitle>
 					<div class="input-group bg-white input-group-alternative">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><ion-icon name="calendar"></ion-icon></span>
+						<div class="input-daterange input-group" id="datepicker">
+							<input type="text" class="input-sm form-control" name="start" />
+							<span class="input-group-addon">to</span>
+							<input type="text" class="input-sm form-control" name="end" />
 						</div>
-						<input style="cursor: pointer;" readonly class="form-control" id="reportrange" placeholder="Search Record" type="text" value="---">
 					</div>
 				</ion-card-subtitle>
 			</ion-card-header>
@@ -35,7 +36,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<ng-container *ngFor="let data of logs  | paginate:{itemsPerPage: 7, currentPage:p}; let i = index">
+							<ng-container *ngFor="let data of logs  | paginate:{itemsPerPage: 10, currentPage:p}; let i = index">
 								<tr  *ngIf="data.message" [ngStyle]="{'background-color':getBackGroundColorSingleEmployee(data.message) , 'color' : getColorSingleEmployee(data.message)}">
 									<td  >{{data.date}}</td>
 									<td colspan="3" align="center">{{data.message}}</td>

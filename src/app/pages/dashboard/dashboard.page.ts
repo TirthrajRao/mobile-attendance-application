@@ -163,7 +163,7 @@ export class DashboardPage implements OnInit {
 					}
 				});
 				console.log("IN IFFFFFFFFFFFFF =============?", this.fiveDaysLogs);
-
+				
 			}
 			if(flag == 0 && this.fiveDaysLogs){
 				this.fiveDaysLogs.unshift(this.filledAttendanceLog[0]);

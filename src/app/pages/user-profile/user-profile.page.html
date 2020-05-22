@@ -13,15 +13,15 @@
 	<div class="container-fluid mt-5" *ngIf="edit">
 		<div class="emp-profile">
 			<div class="row">
-				<div class="col-7 pl-4">
-					<h5 *ngIf="userInfo" style="color: black">
+				<div class="col-6 pl-4">
+					<h5 *ngIf="userInfo" style="color: black; font-size: 17px">
 						{{edit.name}}
 					</h5>
 					<h6 class="mb-6" *ngIf="userInfo" style="color: black">
 						{{edit.designation}}
 					</h6>
 				</div>
-				<div class="col-5">
+				<div class="col-6">
 					<p class="text-center">
 						<button class="btn btn-sm btn-primary profile-edit-btn p-2 text-white" type="submit" (click)="editProfile()" value="Edit Profile">Edit Profile</button>
 					</p>
@@ -71,9 +71,11 @@
 													<label>Password : </label>
 													<div class="input-group input-group-merge input-group-alternative">
 														<input class="form-control user_profile" formControlName="password" [(ngModel)]="edit.password" placeholder="password" [type]="password" readonly>
-														<button class="btn btn-icon btn-default"  (click)="viewPass()" >
-															<i class="fa fa-eye" aria-hidden="true" *ngIf="show"></i>
-															<i class="fa fa-eye-slash" aria-hidden="true" *ngIf="!show"></i> 
+														<button class="btn btn-icon btn-default"  (click)="viewPass()" style="background: #172B4D; color: white; font-size: 20px;">
+															<!-- <i class="fa fa-eye" aria-hidden="true" *ngIf="show"></i> -->
+															  <ion-icon name="eye" *ngIf="show"></ion-icon>
+															<!-- <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="!show"></i>  -->
+															  <ion-icon name="eye-off" *ngIf="!show"></ion-icon>
 														</button>
 													</div>
 												</div>		

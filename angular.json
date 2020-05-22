@@ -43,6 +43,15 @@
               },
               {
                 "input": "./node_modules/ng2-daterangepicker/assets/daterangepicker.css"
+              },
+              {
+                "input": "./node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
+              },
+              {
+                "input": "./node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css",
+              },
+              {
+                "input": "./node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css",
               }
             ],
             "scripts": [

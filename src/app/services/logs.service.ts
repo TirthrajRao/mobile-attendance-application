@@ -29,7 +29,7 @@ export class LogsService {
   		userId : JSON.parse(localStorage.getItem('currentUser'))._id
   	}
     console.log(body);
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-attendance-by-id" , body);	
+    return this._http.post( config.baseApiUrl+"attendance/get-attendance-by-id" , body);	
   }
   
   fillAttendance(){
@@ -52,7 +52,7 @@ export class LogsService {
       console.log("Body Of Fill attendace false",  this.body); 
     }
     }
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/fill-attendance" , this.body);	
+    return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , this.body);	
   }
   
   getLastFiveDaysAttendance(id){
@@ -68,7 +68,7 @@ export class LogsService {
       } 
     }
     console.log(body);
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-last-five-days-logs" , body);  
+    return this._http.post( config.baseApiUrl+"attendance/get-last-five-days-logs" , body);  
   } 
 
   getCurrent(){
@@ -78,17 +78,21 @@ export class LogsService {
   getLogsCountByMonthDefault(){
     var body = {}
     body['userId'] = JSON.parse(localStorage.getItem('currentUser'))._id;
-    return this._http.post("https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-current-month-logs-count" , body);      
+    return this._http.post(config.baseApiUrl+"attendance/get-current-month-logs-count" , body);      
   }
   getLogsByMonthDefaultByPage(body){
     if(JSON.parse(localStorage.getItem('currentUser')).userRole ){
       body['userRole'] = JSON.parse(localStorage.getItem('currentUser')).userRole;
     }
     body['userId'] = JSON.parse(localStorage.getItem('currentUser'))._id;
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-current-month-logs-by-page" , body);      
+    return this._http.post( config.baseApiUrl+"attendance/get-current-month-logs-by-page" , body);      
   }
   getLogsReportById(body){
     console.log(body);
-    return this._http.post( "https://attendance.raoinformationtechnology.com:4000/"+"attendance/get-report-by-id" , body);      
+    return this._http.post( config.baseApiUrl+"attendance/get-report-by-id" , body);      
+  }
+
+  getUserById(id){
+    return this._http.get( config.baseApiUrl+"user/get-user-by-id/"+id);  
   }
 }

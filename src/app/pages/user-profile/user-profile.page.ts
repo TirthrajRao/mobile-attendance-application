@@ -68,7 +68,7 @@ export class UserProfilePage implements OnInit {
 
 	ngOnInit() {
 
-		// this.getEmpData();
+		this.getEmpData();
 
 		var self = this;
 
@@ -109,14 +109,14 @@ export class UserProfilePage implements OnInit {
 
 	}
 
-	// getEmpData(){
-	// 	this._logService.getUserById(this.userId).subscribe((res:any) => {
-	// 		this.edit = res;	
-	// 		console.log("the allDat of user response is =====>", res);
-	// 	},(err) => {
-	// 		console.log("the allData of user err is ===>", err);
-	// 	});
-	// }
+	getEmpData(){
+		this._logService.getUserById(this.userId).subscribe((res:any) => {
+			this.edit = res;	
+			console.log("the allDat of user response is =====>", res);
+		},(err) => {
+			console.log("the allData of user err is ===>", err);
+		});
+	}
 
 	viewPass() {
 		if (this.password === 'password') {
