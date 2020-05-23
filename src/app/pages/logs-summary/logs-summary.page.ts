@@ -51,36 +51,69 @@ export class LogsSummaryPage implements OnInit {
 		var branchName = localStorage.getItem('branchSelected');
 		var self = this;
 		$(document).ready(() => {
+			var element = <HTMLInputElement> document.getElementById("example2");
+			element.disabled = true;
 
-			this.toDate = $('#example1').datepicker({
+			$('#example1').datepicker({
+				todayHighlight: true,
+				autoclose: true,
 				format: "dd/mm/yyyy",
-				autoclose: true
+				clearBtn : true
+			}).on('show', function(e){
+				var date = $('#example2').datepicker('getDate');
+				if(date){
+					$('#example1').datepicker('setEndDate', date);
+				}
 			}).on('change', function(){
 				$('#example1').val();
 				var element = <HTMLInputElement> document.getElementById("example2");
-
 				if($('#example1').val()) {
 					element.disabled = false;
 				}
 				else {
 					element.disabled = true;	
-					const toast = this._toast.create({
-			message: 'Fill Attendence Successfully.',
-			duration: 2000
-		})
-		toast.present();
 				}
 			});
 
-			var element = <HTMLInputElement> document.getElementById("example2");
-			element.disabled = true;
-
-			this.fromDate = $('#example2').datepicker({
+			$('#example2').datepicker({
+				todayHighlight: true,
+				autoclose: true,
 				format: "dd/mm/yyyy",
-				autoclose: true
-			}).on('change', function(){
-				$('#example2').val();
-			});						   	
+				clearBtn : true
+			}).on('show', function(e){
+				var date = $('#example1').datepicker('getDate');
+				if(date){
+					$('#example2').datepicker('setStartDate', date);
+				}
+			});
+
+
+			// this.toDate = $('#example1').datepicker({
+			// 	format: "dd/mm/yyyy",
+			// 	autoclose: true,
+			// 	todayHighlight: true,
+			// 	clearBtn : true
+			// }).on('change', function(){
+			// 	$('#example1').val();
+			// 	var element = <HTMLInputElement> document.getElementById("example2");
+			// 	if($('#example1').val()) {
+			// 		element.disabled = false;
+			// 	}
+			// 	else {
+			// 		element.disabled = true;	
+			// 	}
+			// });
+
+			
+
+			// this.fromDate = $('#example2').datepicker({
+			// 	format: "dd/mm/yyyy",
+			// 	autoclose: true,
+			// 	startDate : new Date()
+
+			// }).on('change', function(){
+			// 	$('#example2').val();
+			// });						   	
 
 			if(branchName == 'rajkot'){
 
