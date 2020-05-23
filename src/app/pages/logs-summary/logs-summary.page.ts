@@ -87,34 +87,6 @@ export class LogsSummaryPage implements OnInit {
 				}
 			});
 
-
-			// this.toDate = $('#example1').datepicker({
-			// 	format: "dd/mm/yyyy",
-			// 	autoclose: true,
-			// 	todayHighlight: true,
-			// 	clearBtn : true
-			// }).on('change', function(){
-			// 	$('#example1').val();
-			// 	var element = <HTMLInputElement> document.getElementById("example2");
-			// 	if($('#example1').val()) {
-			// 		element.disabled = false;
-			// 	}
-			// 	else {
-			// 		element.disabled = true;	
-			// 	}
-			// });
-
-			
-
-			// this.fromDate = $('#example2').datepicker({
-			// 	format: "dd/mm/yyyy",
-			// 	autoclose: true,
-			// 	startDate : new Date()
-
-			// }).on('change', function(){
-			// 	$('#example2').val();
-			// });						   	
-
 			if(branchName == 'rajkot'){
 
 				$("#rajkot").addClass( "active");
