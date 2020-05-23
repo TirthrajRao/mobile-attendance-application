@@ -133,12 +133,6 @@ export class LogsSummaryPage implements OnInit {
 		});
 	}
 
-	resetForm(){
-		this.search = false;
-		this.calculateTotalDuration(this.currentMonthLogs , 5 , moment() , moment().subtract(6, 'days'));
-		(<HTMLInputElement>document.getElementById("reportrange")).value = "";
-	}
-
 	getRangeDate(start, end){
 		console.log("RANGE FUNCTION CALLED");
 		console.log(" date " ,new Date(start._d).toISOString() , new Date(end._d).toISOString());
