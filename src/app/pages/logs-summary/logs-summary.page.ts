@@ -39,53 +39,18 @@ export class LogsSummaryPage implements OnInit {
 	allEmployeesLogs : any = [];
 	absentEmp:any = [];
 	totalEmployees:any;
-	toDate:any;
-	fromDate:any;
+	minDate:any;
+	maxDate:any;
 
 	constructor(public _logService: LogsService , private route: ActivatedRoute,
 		private router: Router , public _loginService: LoginService , private http: HttpClient,public _toast: ToastController
 		) { }
-
+	helloo:any;
 	ngOnInit() {
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		var branchName = localStorage.getItem('branchSelected');
-		var self = this;
 		$(document).ready(() => {
-			var element = <HTMLInputElement> document.getElementById("example2");
-			element.disabled = true;
-
-			$('#example1').datepicker({
-				todayHighlight: true,
-				autoclose: true,
-				format: "dd/mm/yyyy",
-				clearBtn : true
-			}).on('show', function(e){
-				var date = $('#example2').datepicker('getDate');
-				if(date){
-					$('#example1').datepicker('setEndDate', date);
-				}
-			}).on('change', function(){
-				$('#example1').val();
-				var element = <HTMLInputElement> document.getElementById("example2");
-				if($('#example1').val()) {
-					element.disabled = false;
-				}
-				else {
-					element.disabled = true;	
-				}
-			});
-
-			$('#example2').datepicker({
-				todayHighlight: true,
-				autoclose: true,
-				format: "dd/mm/yyyy",
-				clearBtn : true
-			}).on('show', function(e){
-				var date = $('#example1').datepicker('getDate');
-				if(date){
-					$('#example2').datepicker('setStartDate', date);
-				}
-			});
+			var self = this;
 
 			if(branchName == 'rajkot'){
 
@@ -100,17 +65,60 @@ export class LogsSummaryPage implements OnInit {
 			$(function() {
 
 				var start = moment().startOf('month');
+				console.log("the moment of date is ======>", start);
 				var end = moment().endOf('month');
-
+				console.log("the moment of end is =======>", end);
 				function cb(start, end) {
+					console.log("the start is +++++++++++++++++++++++>", start);
 					if(self.userInfo.userRole != 'admin')
 						self.getRangeDate(start, end);
 				}
 
+				var element = <HTMLInputElement> document.getElementById("example2");
+				element.disabled = true;
+
+				$('#example1').datepicker({
+					todayHighlight: true,
+					autoclose: true,
+					format: "mm/dd/yyyy",
+					clearBtn : true,
+				}).on('show', function(e){
+					var date = $('#example2').datepicker('getDate');
+					if(date){
+						$('#example1').datepicker('setEndDate', date);
+					}
+				}).on('changeDate', function(selected){
+					$('#example1').val();
+					self.minDate = selected.date;
+					var element = <HTMLInputElement> document.getElementById("example2");
+					$('#enddate').datepicker('setStartDate', this.minDate)
+					if($('#example1').val()) {
+						element.disabled = false;
+					}
+					else {
+						element.disabled = true;	
+					}
+				});
+
+				$('#example2').datepicker({
+					todayHighlight: true,
+					autoclose: true,
+					format: "mm/dd/yyyy",
+					clearBtn : true,
+				}).on('show', function(e){
+					var date = $('#example1').datepicker('getDate');
+					if(date){
+						$('#example2').datepicker('setStartDate', date);
+					}
+				}).on('changeDate', function(selected) {
+					self.maxDate = selected.date;
+					$('#startdate').datepicker('setEndDate', this.maxDate);
+					if(self.userInfo.userRole != 'admin')
+						self.getRangeDate(start, end);	
+				});
 				cb(start, end);
 			})
 		});
-
 		if(this.userInfo.userRole == 'admin'){
 			this.search = false;
 		}
@@ -135,12 +143,24 @@ export class LogsSummaryPage implements OnInit {
 
 	getRangeDate(start, end){
 		console.log("RANGE FUNCTION CALLED");
-		console.log(" date " ,new Date(start._d).toISOString() , new Date(end._d).toISOString());
-		var increseStartDate:any = moment(start._d).add(1 , 'days');
-		var body = {
-			userId : JSON.parse(localStorage.getItem("currentUser"))._id,
-			startDate : new Date(increseStartDate).toISOString(),
-			endDate : new Date(end._d).toISOString()
+		if(this.minDate === undefined) {
+			var increseStartDate:any = moment(start._d).add(1 , 'days');
+			var body = {
+				userId : JSON.parse(localStorage.getItem("currentUser"))._id,
+				startDate : new Date(increseStartDate).toISOString(),
+				endDate : new Date(end._d).toISOString()
+			}	
+		}
+		else {
+			var increseStartDate:any = moment(this.minDate).add(1 , 'days');
+			var adddate:any = moment(this.maxDate).add(1, 'days');
+			console.log("the increseStartDate is the ================>"), increseStartDate;
+
+			var body = {
+				userId : JSON.parse(localStorage.getItem("currentUser"))._id,
+				startDate : new Date(increseStartDate).toISOString(),
+				endDate : new Date(adddate).toISOString()
+			}
 		}
 		this.search = true;
 		this._logService.getLogsReportById(body).subscribe((res:any)=>{
