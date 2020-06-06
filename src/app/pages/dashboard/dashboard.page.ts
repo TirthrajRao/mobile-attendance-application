@@ -59,15 +59,6 @@ export class DashboardPage implements OnInit {
 		if(this.userInfo.userRole != 'admin'){
 			this.getCurrentDateLogById();
 		}
-
-		this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
-			if (this.constructor.name == "DashboardPage") {
-				if (window.confirm("do you want to exit app")) {
-					navigator["app"].exitApp();
-				}
-			}
-		})
-
 	}
 
 	ngOnInit() {

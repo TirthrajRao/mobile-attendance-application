@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import  { config } from '../config'; 
 import * as moment from 'moment';
-
+import {BehaviorSubject, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,14 +12,18 @@ export class LogsService {
   lastDate:any;
   body:any;
 
+  private _UserMessageSource = new Subject<any>();
+  usermessage$ = this._UserMessageSource.asObservable();
+  
+  sendMessage(message: any) {
+    this._UserMessageSource.next(message);
+  }
+
   constructor(public _http: HttpClient,
     ) { 
     this.lastDate = moment(). format('DD/MM/YYYY');
-    console.log("the dates is =======>", this.lastDate);
     if (JSON.parse(localStorage.getItem('olddate'))) {
       this.currentTime = JSON.parse(localStorage.getItem('olddate'));
-      console.log("the currentTime time is ========>", this.currentTime);
-    console.log("the currentTime id the date is ===>", this.currentTime.date);
     }
   }
 
@@ -80,19 +84,19 @@ export class LogsService {
     body['userId'] = JSON.parse(localStorage.getItem('currentUser'))._id;
     return this._http.post(config.baseApiUrl+"attendance/get-current-month-logs-count" , body);      
   }
-  getLogsByMonthDefaultByPage(body){
-    if(JSON.parse(localStorage.getItem('currentUser')).userRole ){
-      body['userRole'] = JSON.parse(localStorage.getItem('currentUser')).userRole;
-    }
-    body['userId'] = JSON.parse(localStorage.getItem('currentUser'))._id;
-    return this._http.post( config.baseApiUrl+"attendance/get-current-month-logs-by-page" , body);      
-  }
+
   getLogsReportById(body){
     console.log(body);
     return this._http.post( config.baseApiUrl+"attendance/get-report-by-id" , body);      
   }
 
   getUserById(id){
+    console.log("the userid is -=============>", id);
     return this._http.get( config.baseApiUrl+"user/get-user-by-id/"+id);  
+  }
+
+  getEditById(id, value){
+    console.log("the service data is: ", id, value);
+    return this._http.put( config.baseApiUrl+"user/update-user-by-id/"+id,value);  
   }
 }

@@ -16,6 +16,18 @@
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle>
+            <ion-item lines="none" detail="false" routerLink="logs-summary">
+              <ion-icon slot="start" icon="list"></ion-icon>
+              <ion-label>Log-Summary</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+            <ion-item (click)="userProfile()" lines="none" detail="false" >
+              <ion-icon slot="start" icon="person-outline"></ion-icon>
+              <ion-label>User Profile</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle>
             <ion-item (click)="logout()" lines="none" detail="false" >
               <ion-icon slot="start" icon="exit-outline"></ion-icon>
               <ion-label>logout</ion-label>

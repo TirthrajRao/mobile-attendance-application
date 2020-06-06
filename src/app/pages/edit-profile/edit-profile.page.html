@@ -1,0 +1,201 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+		</ion-buttons>
+		<ion-title>
+			Edit-Profile
+		</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content color="primary">
+	<div class="container-fluid mt-5">
+		<ion-card>
+			<ion-card-header>
+				<ion-card-subtitle>
+					<div class="row">
+						<div class="col-xl-10">
+							<div class="profile-head mb-3">
+								<h5>Edit Your Profile</h5>
+							</div>
+						</div>
+					</div>
+				</ion-card-subtitle>
+			</ion-card-header>
+
+			<ion-card-content>
+				<div class="row">
+					<div class="col-xl-12">
+						<form [formGroup]="editForm">
+							<div class="row">
+								<div class="col-xl-6">
+									<div class="form-group">
+										<label>E-mail : </label>
+										<div class="input-group input-group-merge input-group-alternative">
+											<input class="form-control" formControlName="email" [(ngModel)]="edit.email" placeholder="E-mail" type="text">
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-6">
+									<div class="form-group">
+										<label>Name : </label>
+										<div class="input-group input-group-merge input-group-alternative">
+											<input class="form-control" formControlName="name" [(ngModel)]="edit.name" placeholder="Name" type="text">
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-6">
+									<div class="form-group">
+										<label>Password : </label>
+										<div class="input-group input-group-merge input-group-alternative">
+											<input class="form-control" formControlName="password" [(ngModel)]="edit.password" placeholder="password" [type]="password">
+											<button class="btn btn-icon btn-default"  (click)="viewPass()" style="background: #172B4D; color: white; font-size: 15px;">
+												<ion-icon name="eye" *ngIf="show"></ion-icon>
+												<ion-icon name="eye-off" *ngIf="!show"></ion-icon>
+											</button>
+										</div>
+										<a href="" data-toggle="modal" data-target="#exampleModal" class="float-right">Change Password</a>
+									</div>
+								</div>
+								<div class="col-xl-6">
+									<div class="form-group">
+										<label>Designation : </label>
+										<div class="input-group input-group-merge input-group-alternative">
+											<input class="form-control" formControlName="designation" placeholder="Designation" [(ngModel)]="edit.designation" type="text">
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-6">
+									<div class="form-group">
+										<label>User Role : </label>
+										<div class="input-group input-group-merge input-group-alternative">
+											<input class="form-control user_profile" formControlName="userRole" [(ngModel)]="edit.userRole" placeholder="User Role" type="text" readonly>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-6">
+									<div class="form-group">
+										<label>Branch : </label>
+										<div class="input-group input-group-merge input-group-alternative">
+											<input class="form-control user_profile" formControlName="branch" [(ngModel)]="edit.branch" placeholder="branch" type="text" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-6">
+								<div class="row">
+									<div class="col-6 pl-0">
+										<div class="form-group">
+											<label>User Role : </label>
+											<div class="input-group input-group-merge input-group-alternative">
+												<input class="form-control user_profile" formControlName="userRole" [(ngModel)]="edit.userRole" placeholder="User Role" type="text" readOnly>
+											</div>
+										</div>
+									</div>
+									<div class="col-6 pr-0">
+										<div class="form-group">
+											<label>Branch : </label>
+											<div class="input-group input-group-merge input-group-alternative">
+												<input class="form-control user_profile" formControlName="branch" [(ngModel)]="edit.branch" placeholder="branch" type="text" readOnly>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="text-center">
+								<button type="button" (click)="updateUser()" class="btn btn-primary my-4 mb--1">Update User</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</ion-card-content>
+		</ion-card>
+
+		<!-- Footer -->
+		<footer class="footer">
+			<div class="row align-items-center justify-content-xl-between">
+				<div class="col-xl-6">
+					<div class="copyright text-center text-xl-left text-muted">
+						&copy; 2019 <a href="https://raoinformationtechnology.com/" class="font-weight-bold ml-1" target="_blank">Rao Infotech</a>
+					</div>
+				</div>
+
+			</div>
+		</footer>	
+
+
+		<!-- Password Change Modal -->
+		<div id="exampleModal" class="modal mt-5">
+			<div >
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="text-muted">Change Your Password</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="card-body px-lg-5 py-lg-5">
+							<form [formGroup]="passForm" role="form">
+								<div class="form-group">
+									<ion-icon name="eye-off"></ion-icon>
+									<h5 class="text-muted pass_modal">Old Password:</h5>
+									<div class="input-group password_modal input-group-merge input-group-alternative">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<svg class="bi bi-lock" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+													<path fill-rule="evenodd" d="M11.5 8h-7a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1zm-7-1a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-7zm0-3a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+												</svg>
+											</span>
+										</div>
+										<input class="form-control" formControlName="oldPassword" id="txtOldPassword" name="password" placeholder="Old Password" [type]="password" required>
+										<button class="btn btn-icon"  (click)="viewPass()" style="background: #172B4D; color: white; font-size: 15px;">
+											<ion-icon name="eye" *ngIf="show"></ion-icon>
+											<ion-icon name="eye-off" *ngIf="!show"></ion-icon>
+										</button>
+									</div>
+									<div class="text-red pass_text" *ngIf="this.passForm.value.oldPassword != this.edit.password ? true : false">Password Do Not Match</div>
+									<div class="text-green pass_text" *ngIf="this.passForm.value.oldPassword == this.edit.password ? true : false">Password Match</div>
+								</div>
+								<hr>
+								<div class="form-group mb-3">
+									<h5 class="text-muted pass_modal">New Password:</h5>
+									<div class="input-group password_modal input-group-merge input-group-alternative">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<svg class="bi bi-lock" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+													<path fill-rule="evenodd" d="M11.5 8h-7a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1zm-7-1a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-7zm0-3a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+												</svg>
+											</span>
+										</div>
+										<input class="form-control" id="txtPassword" *ngIf="this.edit.password == this.passForm.value.oldPassword ? true : false" formControlName="newPassword" name="newPassword" placeholder="New Password" type="password"  required>
+									</div>
+								</div>
+								<div class="form-group">
+									<h5 class="text-muted pass_modal">Confirm Password:</h5>
+									<div class="input-group password_modal input-group-merge input-group-alternative">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<svg class="bi bi-lock" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+													<path fill-rule="evenodd" d="M11.5 8h-7a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1zm-7-1a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-7zm0-3a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+												</svg>
+											</span>
+										</div>
+										<input class="form-control" id="txtConfirmPassword" *ngIf="this.edit.password == this.passForm.value.oldPassword ? true : false" formControlName="confirmPassword" name="confirmPassword" placeholder="Confirm Password" type="password">
+									</div>
+									<span *ngIf="this.passForm.value.newPassword != this.passForm.value.confirmPassword ? true : false" class="text-red pass_text">Password do not match</span>
+								</div>
+								<div class="text-center">
+									<button type="button" (click)="updatePass(passForm.value)"  [disabled]="this.passForm.value.newPassword != this.passForm.value.confirmPassword ? true : false" data-dismiss="modal" class="btn btn-primary my-3">Update Password</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ion-content>

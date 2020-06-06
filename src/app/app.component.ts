@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   navigate:any;
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
+  subscribe:any;
+
   
   public selectedIndex = 0;
   public appPages = [
@@ -27,10 +29,11 @@ export class AppComponent implements OnInit {
     url: '',
     icon: 'home'
   },
-  {
-    title: 'Logs-Summary',
-    url: 'logs-summary',
-  }
+  // {
+  //   title: 'Logs-Summary',
+  //   url: 'logs-summary',
+  //   icon: 'list-box'
+  // }
   ];
   
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -61,12 +64,14 @@ export class AppComponent implements OnInit {
 
   private loading;
   ngOnInit() {
+      this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
     if(!this.userInfo){
       this._router.navigate(['/login']);
     }else{
       console.log("called 2nd time");
       console.log(this.userInfo);
       this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+      this._router.navigate(['/']);
       this._loadingController.create({
         message: ''
       }).then((overlay) => {
@@ -79,6 +84,14 @@ export class AppComponent implements OnInit {
         this._nav.navigateRoot('');
       }, 3000)
     }
+
+    this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
+      if (this.constructor.name == "DashboardPage") {
+        if (window.confirm("do you want to exit app")) {
+          navigator["app"].exitApp();
+        }
+      }
+    })
   }
 
   backButtonEvent() {

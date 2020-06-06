@@ -4,7 +4,6 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import { Platform, NavController, LoadingController, ToastController } from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
 import { LoginService } from 'src/app/services/login.service';
-// import { mobiscroll, MbscRangeOptions } from '@mobiscroll/angular';
 import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 
@@ -45,7 +44,7 @@ export class LogsSummaryPage implements OnInit {
 	constructor(public _logService: LogsService , private route: ActivatedRoute,
 		private router: Router , public _loginService: LoginService , private http: HttpClient,public _toast: ToastController
 		) { }
-	helloo:any;
+	
 	ngOnInit() {
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		var branchName = localStorage.getItem('branchSelected');

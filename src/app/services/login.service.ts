@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { of, pipe } from 'rxjs';
 import { map, timeout} from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -34,11 +33,6 @@ export class LoginService {
 			}
 			return user;
 		}));
-	}
-
-	getIpCliente(){
-		console.log("called this ==+>");
-		return this._http.get('https://api.ipify.org') 
 	}
 
 	logout() {

@@ -12,9 +12,8 @@
 .profile-edit-btn{
     border: none;
     border-radius: 1.5rem;
-    width: 70%;
+    width: 80%;
     padding: 2%;
-    font-weight: 600;
     color: #6c757d;
     cursor: pointer;
 }
@@ -38,7 +37,9 @@
 .pass_text{
     font-size: 13px;
 }
-
+.form-group{
+  margin-bottom: 19px !important;
+}
 
 
 
@@ -180,6 +181,10 @@
    -moz-box-shadow: 0 0 2px black;
    box-shadow: 0 0 2px black;
 }
+.form-group {
+    margin-bottom: 0rem;
+}
+
  .timeline-wrapper .timeline-content-item .timeline-content-item-reveal a span {
    position: absolute;
    width: 250%;
@@ -203,4 +208,8 @@
 }
  .timeline-wrapper .timeline-content-item.active .timeline-content-item-reveal {
    display: block;
+}
+label {
+  color:grey;
+  font-size: 15px;
 }

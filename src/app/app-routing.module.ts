@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/logs-summary/logs-summary.module').then( m => m.LogsSummaryPageModule)
   },
   {
+    path: 'edit-profile/:id',
+    loadChildren: () => import('./pages/edit-profile/edit-profile.module').then( m => m.EditProfilePageModule)
+  },
+  {
     path: 'user-profile/:id',
     loadChildren: () => import('./pages/user-profile/user-profile.module').then( m => m.UserProfilePageModule)
   }
