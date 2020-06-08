@@ -33,7 +33,8 @@ export class UserProfilePage implements OnInit {
     private _logService: LogsService,
     ) {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'));
-    this.userId = this._route.snapshot.paramMap.get('id');
+    this.edit = this.userInfo;
+    this.userId = this.userInfo._id;
     this.myForm = new FormGroup({
       userRole: new FormControl('', [Validators.required]),
       branch: new FormControl(null),

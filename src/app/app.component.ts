@@ -29,11 +29,21 @@ export class AppComponent implements OnInit {
     url: '',
     icon: 'home'
   },
-  // {
-  //   title: 'Logs-Summary',
-  //   url: 'logs-summary',
-  //   icon: 'list-box'
-  // }
+  {
+    title: 'Logs-Summary',
+    url: 'logs-summary',
+    icon: 'list'
+  },
+  {
+    title: 'User-Profile',
+    url: 'user-profile',
+    icon: 'person'
+  },
+  {
+    title: 'Log-out',
+    url: 'login',
+    icon: 'exit'
+  }
   ];
   
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -129,10 +139,5 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('olddate');
     localStorage.removeItem('date');
-  }
-
-  userProfile(){
-    console.log("the user id is : ======>", this.userInfo._id);
-    this._router.navigate(['user-profile', this.userInfo._id])
   }
 }

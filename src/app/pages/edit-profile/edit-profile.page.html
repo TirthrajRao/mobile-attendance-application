@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content color="primary">
-	<div class="container-fluid mt-5">
+	<div class="container-fluid pl-0 pr-0 mt-5">
 		<ion-card>
 			<ion-card-header>
 				<ion-card-subtitle>
@@ -55,7 +55,7 @@
 												<ion-icon name="eye-off" *ngIf="!show"></ion-icon>
 											</button>
 										</div>
-										<a href="" data-toggle="modal" data-target="#exampleModal" class="float-right">Change Password</a>
+										<a href="" data-toggle="modal" data-target="#exampleModal" class="float-right text-muted">Change Password</a>
 									</div>
 								</div>
 								<div class="col-xl-6">
@@ -66,24 +66,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-xl-6">
-									<div class="form-group">
-										<label>User Role : </label>
-										<div class="input-group input-group-merge input-group-alternative">
-											<input class="form-control user_profile" formControlName="userRole" [(ngModel)]="edit.userRole" placeholder="User Role" type="text" readonly>
-										</div>
-									</div>
-								</div>
-								<div class="col-xl-6">
-									<div class="form-group">
-										<label>Branch : </label>
-										<div class="input-group input-group-merge input-group-alternative">
-											<input class="form-control user_profile" formControlName="branch" [(ngModel)]="edit.branch" placeholder="branch" type="text" readonly>
-										</div>
-									</div>
-								</div>
 							</div>
-
 							<div class="col-xl-6">
 								<div class="row">
 									<div class="col-6 pl-0">

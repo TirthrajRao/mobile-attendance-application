@@ -32,7 +32,10 @@ export class LoginPage implements OnInit {
 		private _loadingController: LoadingController,
 		public _navCtrl: NavController
 		) { 
-		
+		if(localStorage.getItem('currentUser')) {
+			localStorage.removeItem('currentUser');
+		}
+
 		if (this._loginService.currentUserValue) { 
 			this._router.navigate(['']);
 		}

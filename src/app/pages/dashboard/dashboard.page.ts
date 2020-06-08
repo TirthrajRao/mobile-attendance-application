@@ -217,8 +217,6 @@ export class DashboardPage implements OnInit {
 					console.log("the old date is ====>", this.olddate);
 					this.dates.push(this.getdate);
 					console.log("the dates is ===>", this.dates);   
-					// console.log("the data of  the date is demo of ====================>", this.alldatedemo);
-					// console.log("the dates id is =======================>", this.dates);
 				}
 			})		
 		}, 10000);

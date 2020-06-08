@@ -27,70 +27,68 @@
 					</h1>
 				</div>
 			</div>
-			<div *ngIf="edit">
-				<div class="row">
-					<div class="col-xl-12">
-						<form [formGroup]="myForm">
-							<div class="row">
-								<div class="col-xl-6">
-									<div class="form-group">
-										<label>E-mail : </label>
-										<div class="input-group input-group-merge input-group-alternative">
-											<input class="form-control user_profile" formControlName="email" [(ngModel)]="edit.email" placeholder="E-mail" type="text" readOnly>
-										</div>
+			<div class="row">
+				<div class="col-xl-12">
+					<form [formGroup]="myForm">
+						<div class="row">
+							<div class="col-xl-6">
+								<div class="form-group">
+									<label>E-mail : </label>
+									<div class="input-group input-group-merge input-group-alternative">
+										<input class="form-control user_profile" formControlName="email" [(ngModel)]="edit.email" placeholder="E-mail" type="text" readOnly>
 									</div>
 								</div>
-								<div class="col-xl-6">
-									<div class="form-group">
-										<label>Name : </label>
-										<div class="input-group input-group-merge input-group-alternative">
-											<input class="form-control user_profile" formControlName="name" [(ngModel)]="edit.name" placeholder="Name" type="text" readOnly>
-										</div>
+							</div>
+							<div class="col-xl-6">
+								<div class="form-group">
+									<label>Name : </label>
+									<div class="input-group input-group-merge input-group-alternative">
+										<input class="form-control user_profile" formControlName="name" [(ngModel)]="edit.name" placeholder="Name" type="text" readOnly>
 									</div>
 								</div>
-								<div class="col-xl-6">
-									<div class="form-group">
-										<label>Password : </label>
-										<div class="input-group input-group-merge input-group-alternative">
-											<input class="form-control user_profile" formControlName="password" [(ngModel)]="edit.password" placeholder="password" [type]="password" readonly>
-											<button class="btn btn-icon btn-default"  (click)="viewPass()" style="background: #172B4D; color: white; font-size: 15px;">
-												<ion-icon name="eye" *ngIf="show"></ion-icon>
-												<ion-icon name="eye-off" *ngIf="!show"></ion-icon>
-											</button>
-										</div>
+							</div>
+							<div class="col-xl-6">
+								<div class="form-group">
+									<label>Password : </label>
+									<div class="input-group input-group-merge input-group-alternative">
+										<input class="form-control user_profile" formControlName="password" [(ngModel)]="edit.password" placeholder="password" [type]="password" readonly>
+										<button class="btn btn-icon btn-default"  (click)="viewPass()" style="background: #172B4D; color: white; font-size: 15px;">
+											<ion-icon name="eye" *ngIf="show"></ion-icon>
+											<ion-icon name="eye-off" *ngIf="!show"></ion-icon>
+										</button>
 									</div>
 								</div>
-								<div class="col-xl-6">
-									<div class="form-group">
-										<label>Designation : </label>
-										<div class="input-group input-group-merge input-group-alternative">
-											<input class="form-control user_profile" formControlName="designation" placeholder="Designation" [(ngModel)]="edit.designation" type="text" readOnly>
-										</div>
+							</div>
+							<div class="col-xl-6">
+								<div class="form-group">
+									<label>Designation : </label>
+									<div class="input-group input-group-merge input-group-alternative">
+										<input class="form-control user_profile" formControlName="designation" placeholder="Designation" [(ngModel)]="edit.designation" type="text" readOnly>
 									</div>
 								</div>
-								<div class="col-xl-6">
-									<div class="row">
-										<div class="col-6">
-											<div class="form-group">
-												<label>User Role : </label>
-												<div class="input-group input-group-merge input-group-alternative">
-													<input class="form-control user_profile" formControlName="userRole" [(ngModel)]="edit.userRole" placeholder="User Role" type="text" readOnly>
-												</div>
+							</div>
+							<div class="col-xl-6">
+								<div class="row">
+									<div class="col-6">
+										<div class="form-group">
+											<label>User Role : </label>
+											<div class="input-group input-group-merge input-group-alternative">
+												<input class="form-control user_profile" formControlName="userRole" [(ngModel)]="edit.userRole" placeholder="User Role" type="text" readOnly>
 											</div>
 										</div>
-										<div class="col-6">
-											<div class="form-group">
-												<label>Branch : </label>
-												<div class="input-group input-group-merge input-group-alternative">
-													<input class="form-control user_profile" formControlName="branch" [(ngModel)]="edit.branch" placeholder="branch" type="text" readOnly>
-												</div>
+									</div>
+									<div class="col-6">
+										<div class="form-group">
+											<label>Branch : </label>
+											<div class="input-group input-group-merge input-group-alternative">
+												<input class="form-control user_profile" formControlName="branch" [(ngModel)]="edit.branch" placeholder="branch" type="text" readOnly>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</form>
-					</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
