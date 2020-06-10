@@ -1,16 +1,16 @@
-<ion-header>
+<ion-header *ngIf="data">
 	<ion-toolbar>
 		<ion-buttons slot="start">
-			<ion-menu-button></ion-menu-button>
+			<ion-menu-button menu="main-menu"></ion-menu-button>
 		</ion-buttons>
 		<ion-title>
 			Dashboard
 		</ion-title>
 	</ion-toolbar>
+
 </ion-header>
 
-<ion-content color="primary">
-
+<ion-content color="primary" *ngIf="data">
 	<div class="header pt-5">
 		<ion-card (click)="fillAttendance()" class="m-3" style="height: 132px; ">
 			<ion-card-header>
@@ -80,3 +80,111 @@
 		</ion-card>
 	</div>
 </ion-content>
+
+
+
+<ion-header *ngIf="!data">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button menu="main-menu"></ion-menu-button>
+		</ion-buttons>
+		<ion-title>
+			    <ion-skeleton-text animated style="width: 60%; margin: auto; height: 15px;"></ion-skeleton-text>
+		</ion-title>
+	</ion-toolbar>
+
+</ion-header>
+
+<ion-content color="primary" *ngIf="!data">
+	<div class="header pt-5">
+		<ion-card (click)="fillAttendance()" class="m-3" style="height: 132px; ">
+			<ion-card-header>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col p-0">
+							<ion-card-subtitle>
+								<p class="h6 card-title text-uppercase text-muted mb-1">
+									<ion-skeleton-text animated style="width: 45%; height: 14px;"></ion-skeleton-text>
+								</p>
+								<p *ngIf="!filledAttendanceLog" class="h6 text-danger">
+									<ion-skeleton-text animated style="width: 90%; height: 14px;"></ion-skeleton-text>
+									<ion-skeleton-text animated style="width: 45%; height: 14px;"></ion-skeleton-text>
+								</p>
+								<p *ngIf="filledAttendanceLog && entry" class="h6 card-text text-success">
+									<ion-skeleton-text animated style="width: 80%; height: 14px;"></ion-skeleton-text>
+								</p>	
+								<p *ngIf="filledAttendanceLog && exit" class="h6 card-text  text-danger">
+									<ion-skeleton-text animated style="width: 90%; height: 14px;"></ion-skeleton-text>
+									<ion-skeleton-text animated style="width: 40%; height: 14px;"></ion-skeleton-text>
+								</p>
+							</ion-card-subtitle>
+						</div>
+					</div>
+				</div>
+			</ion-card-header>
+
+			<ion-card-content>
+				<p class="cart-footer-text mb-0 mt-4 text-muted text-sm" *ngIf="entry">
+					<span class="text-success mr-2">
+						<ion-skeleton-text animated style="width: 75%; height: 14px;"></ion-skeleton-text>
+					</span>
+				</p>
+				<p class="cart-footer-text mb-0 mt-4 text-muted text-sm" *ngIf="exit">
+					<span class="text-danger mr-2">
+						<ion-skeleton-text animated style="width: 75%; height: 14px;"></ion-skeleton-text>
+					</span>
+				</p>
+			</ion-card-content>
+		</ion-card>
+
+		<ion-card class="mt-5 m-3" >
+			<ion-card-header>
+				<ion-card-subtitle>
+					<h5 class="mb-0 text-muted">
+						<ion-skeleton-text animated style="width: 50%; height: 16px;"></ion-skeleton-text>
+					</h5>
+
+				</ion-card-subtitle>
+			</ion-card-header>
+
+			<ion-card-content class="p-0">
+				<div class="table-responsive">
+					<table class="table align-items-center table-flush">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">
+									<ion-skeleton-text animated style="width: 45%; height: 14px;"></ion-skeleton-text>
+								</th>
+								<th scope="col">
+									<ion-skeleton-text animated style="width: 45%; height: 14px;"></ion-skeleton-text>
+								</th>
+								<th scope="col">
+									<ion-skeleton-text animated style="width: 60%; height: 14px;"></ion-skeleton-text>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container>
+								<div id="clock"></div>
+								<tr *ngFor="let data of dates ; let i = index">
+									<td scope="row">
+										{{data.date}}
+									</td>
+									<td>
+										{{data.day}}
+									</td>
+									<td>
+										{{data.lastLog}}
+									</td>
+								</tr>
+							</ng-container>
+						</tbody>
+					</table>
+				</div>
+			</ion-card-content>
+		</ion-card>
+	</div>
+</ion-content>
+
+
+

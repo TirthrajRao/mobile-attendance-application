@@ -44,7 +44,7 @@ export class DashboardPage implements OnInit {
 		lastLog: ""
 	}
 	timeflag
-
+	data:any;
 	subscribe:any;
 	private loading;
 
@@ -56,6 +56,15 @@ export class DashboardPage implements OnInit {
 			this._router.navigate(['/login']);
 		}
 
+		
+		this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
+			if (this.constructor.name == "DashboardPage") {
+				if (window.confirm("do you want to exit app")) {
+					navigator["app"].exitApp();
+				}
+			}
+		})
+
 		if(this.userInfo.userRole != 'admin'){
 			this.getCurrentDateLogById();
 		}
@@ -66,6 +75,16 @@ export class DashboardPage implements OnInit {
 		this.ionViewWillLeave();
 	}
 
+	ionViewWillEnter() {
+    setTimeout(() => {
+      this.data = {
+        'heading': 'Normal text',
+        'para1': 'Lorem ipsum dolor sit amet, consectetur',
+        'para2': 'adipiscing elit.'
+      };
+    }, 5000);
+  }
+  
 	getCurrentDateLogById(){
 		this._logService.getCurrentDateLogById().subscribe((response:any) => {
 			console.log("response of getCurrentDateLogById ===>" , response);

@@ -82,17 +82,6 @@ export class AppComponent implements OnInit {
       console.log(this.userInfo);
       this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
       this._router.navigate(['/']);
-      this._loadingController.create({
-        message: ''
-      }).then((overlay) => {
-        this.loading = overlay;
-        this.loading.present();
-      });
-
-      setTimeout(() => {
-        this._loadingController.dismiss();
-        this._nav.navigateRoot('');
-      }, 3000)
     }
 
     this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
