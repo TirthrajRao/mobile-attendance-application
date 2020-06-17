@@ -69,7 +69,7 @@ export class EditProfilePage implements OnInit {
 		console.log("the all Edit data is ======>", this.edit);
 		this._logsService.getEditById(this.userId, this.edit).subscribe((res:any) => {
 			console.log("the edit data is: =====>", res);
-					this._router.navigate(['user-profile', Id])
+					this._router.navigate(['user-profile'])
 				    this._logsService.sendMessage(res);
 		}, (err) => {
 			console.log("the edit data err is: ===>", err);

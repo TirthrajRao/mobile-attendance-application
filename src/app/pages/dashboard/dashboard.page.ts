@@ -51,12 +51,14 @@ export class DashboardPage implements OnInit {
 	constructor(private _logService: LogsService, private _router: Router, private platform: Platform, public _loginService: LoginService,
 		private _loadingController: LoadingController, private _navCtrl: NavController, public _toast: ToastController, public alertController: AlertController
 		) { 
+
+		this.checkIp();
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		if(!this.userInfo){
 			this._router.navigate(['/login']);
 		}
 
-		
+
 		this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
 			if (this.constructor.name == "DashboardPage") {
 				if (window.confirm("do you want to exit app")) {
@@ -76,15 +78,15 @@ export class DashboardPage implements OnInit {
 	}
 
 	ionViewWillEnter() {
-    setTimeout(() => {
-      this.data = {
-        'heading': 'Normal text',
-        'para1': 'Lorem ipsum dolor sit amet, consectetur',
-        'para2': 'adipiscing elit.'
-      };
-    }, 5000);
-  }
-  
+		setTimeout(() => {
+			this.data = {
+				'heading': 'Normal text',
+				'para1': 'Lorem ipsum dolor sit amet, consectetur',
+				'para2': 'adipiscing elit.'
+			};
+		}, 5000);
+	}
+
 	getCurrentDateLogById(){
 		this._logService.getCurrentDateLogById().subscribe((response:any) => {
 			console.log("response of getCurrentDateLogById ===>" , response);
@@ -108,7 +110,7 @@ export class DashboardPage implements OnInit {
 						console.log("the difftime is true");
 						this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
 						this.exit = false;
-						this.fillAttendance();
+						this.MarkAttendance();
 					}
 					else {
 						this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
@@ -150,9 +152,49 @@ export class DashboardPage implements OnInit {
 		}
 	}
 
-
+	checkIp(){
+		console.log("hye in check");
+		this._loginService.getIpCliente().subscribe((response)=>{
+		},(err)=>{
+			console.log("this --------------> ",err);
+			if(err.error.text == '119.160.195.171' || err.error.text == '1.38.72.84' || err.error.text == '114.31.188.173' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
+				this.loginFlag = true;
+				this.userInfo['loginFlag'] = true;
+				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
+				// alert(err.error.text + " --> Valid IP");	
+			}
+			else{	
+				this.loginFlag = false;
+				this.userInfo['loginFlag'] = false;
+				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
+				// alert(err.error.text + " ---> Invalid IP");
+			}
+		});
+	}
 
 	fillAttendance(){
+		if(JSON.parse(localStorage.getItem('currentUser')).loginFlag == false){
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "Mark attendance from unauthorized IP address",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, Mark Attendance!'
+			}).then((result) => {
+				if (result.value) {
+					this.MarkAttendance();
+				}
+			});
+		}
+		else{
+			this.MarkAttendance();
+		}
+	}
+	MarkAttendance(){
+
+	// fillAttendance(){
 		this._logService.fillAttendance().subscribe((response:any) =>{
 			console.log("response ====>" , response);
 

@@ -19,8 +19,8 @@ export class LoginService {
 		this.currentUser = this.currentUserSubject.asObservable();
 	}
 	public get currentUserValue(): any {
-        return this.currentUserSubject.value;
-    }
+		return this.currentUserSubject.value;
+	}
 
 	loginUser(body ){
 		return this._http.post(	config.baseApiUrl+"user/login" , body)
@@ -35,8 +35,13 @@ export class LoginService {
 		}));
 	}
 
+	getIpCliente(){
+		console.log("called this ==>");
+		return this._http.get('https://api.ipify.org') 
+	}
+
 	logout() {
-        localStorage.removeItem('currentUser');
-     	this.currentUserSubject.next(null);	
-    }
+		localStorage.removeItem('currentUser');
+		this.currentUserSubject.next(null);	
+	}
 }

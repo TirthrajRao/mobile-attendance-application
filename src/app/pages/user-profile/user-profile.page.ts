@@ -23,6 +23,7 @@ export class UserProfilePage implements OnInit {
   show:boolean = false;
   allData:any = [];
   data:any;
+  skeleton:any;
 
   constructor(
     public _router: Router,
@@ -55,6 +56,16 @@ export class UserProfilePage implements OnInit {
         this.edit = message;
       }
     )
+  }
+
+  ionViewWillEnter() {
+    setTimeout(() => {
+      this.skeleton = {
+        'heading': 'Normal text',
+        'para1': 'Lorem ipsum dolor sit amet, consectetur',
+        'para2': 'adipiscing elit.'
+      };
+    }, 5000);
   }
 
   getEmpData(){

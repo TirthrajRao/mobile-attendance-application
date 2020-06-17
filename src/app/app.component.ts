@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
   subscribe:any;
-
   
   public selectedIndex = 0;
   public appPages = [
@@ -39,11 +38,6 @@ export class AppComponent implements OnInit {
     url: 'user-profile',
     icon: 'person'
   },
-  {
-    title: 'Log-out',
-    url: 'login',
-    icon: 'exit'
-  }
   ];
   
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -122,11 +116,14 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout() {
+   logout() {
+    console.log("logiut ccalled");
     this.loginService.logout();
     this._router.navigate(['login']);
+    localStorage.removeItem('branchSelected');
     localStorage.removeItem('currentUser');
     localStorage.removeItem('olddate');
     localStorage.removeItem('date');
+
   }
 }

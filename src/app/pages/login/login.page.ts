@@ -32,9 +32,10 @@ export class LoginPage implements OnInit {
 		private _loadingController: LoadingController,
 		public _navCtrl: NavController
 		) { 
-		if(localStorage.getItem('currentUser')) {
-			localStorage.removeItem('currentUser');
-		}
+		// if(localStorage.getItem('currentUser')) {
+		// 	localStorage.removeItem('currentUser');
+		// 	this._loginService.logout();
+		// }
 
 		if (this._loginService.currentUserValue) { 
 			this._router.navigate(['']);
@@ -69,18 +70,7 @@ private loading;
 			this.isDisable = false;
 			this.isError = false;
 			localStorage.setItem('currentUser', JSON.stringify(response));
-				this._loadingController.create({
-					message: ''
-				}).then((overlay) => {
-					this.loading = overlay;
-					this.loading.present();
-				});
-
-				setTimeout(() => {
-					this._loadingController.dismiss();
-					this._navCtrl.navigateRoot('');
-				}, 3000)
-			// this._router.navigate(['']);
+			this._router.navigate(['']);
 			this.loginForm.reset();
 		},(err) => {
 			console.log(err.status)
