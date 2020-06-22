@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Platform, LoadingController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -15,13 +15,17 @@ import { interval, Subscription } from 'rxjs';
 })
 export class LoginPage implements OnInit {
 	loginForm:FormGroup;
-	email:string;
-	password:string;
 	isError : boolean = false;
 	isDisable:boolean =false;
 	errorMessage : any;
 	loginFlag: boolean = false;
 	subscription: Subscription;
+	email:any;
+	loading:any;
+	data:any = {
+		"email": "",
+		"password": ""
+	}
 
 	constructor(
 		private platform: Platform,
@@ -29,18 +33,20 @@ export class LoginPage implements OnInit {
 		private statusBar: StatusBar,
 		public _router: Router,
 		public _loginService: LoginService,
-		private _loadingController: LoadingController,
-		public _navCtrl: NavController
+		public _loadingController: LoadingController,
+		public _navCtrl: NavController,
+		private route: ActivatedRoute,
 		) { 
-		// if(localStorage.getItem('currentUser')) {
-		// 	localStorage.removeItem('currentUser');
-		// 	this._loginService.logout();
-		// }
+
+		if(localStorage.getItem('currentUser')) {
+			localStorage.removeItem('currentUser');
+			this._loginService.logout();
+		}
 
 		if (this._loginService.currentUserValue) { 
 			this._router.navigate(['']);
 		}
-
+		 
 		this.loginForm = new FormGroup({
 			email: new FormControl('', Validators.required),
 			password:new FormControl('' , Validators.required)
@@ -61,15 +67,20 @@ export class LoginPage implements OnInit {
 		});
 	}
 
-private loading;
+
+	get f() { return this.loginForm.controls; }
 
 	login(value){
-		console.log("the loginForm value is ===>", this.loginForm.value);
-		this._loginService.loginUser(value).subscribe((response) => {
+		var email = this.loginForm.value.email;
+		var textLowercase = email.toLowerCase();		
+		this.data.email = textLowercase;
+		this.data.password = this.loginForm.value.password;
+		this._loginService.loginUser(this.data).subscribe((response) => {
 			console.log("successfull login"  , response);
 			this.isDisable = false;
 			this.isError = false;
 			localStorage.setItem('currentUser', JSON.stringify(response));
+			
 			this._router.navigate(['']);
 			this.loginForm.reset();
 		},(err) => {
@@ -97,3 +108,6 @@ private loading;
 		this.subscription.unsubscribe();
 	}
 }
+
+
+

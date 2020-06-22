@@ -41,6 +41,7 @@ export class LoginService {
 	}
 
 	logout() {
+		console.log("called");
 		localStorage.removeItem('currentUser');
 		this.currentUserSubject.next(null);	
 	}

@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Platform, NavController, ActionSheetController, ToastController, LoadingController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import {  ViewChildren, QueryList } from '@angular/core';
 import { IonRouterOutlet } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -15,11 +16,11 @@ import { IonRouterOutlet } from '@ionic/angular';
 })
 
 export class AppComponent implements OnInit {
-  userInfo:any;
   navigate:any;
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
   subscribe:any;
+  userInfo = JSON.parse(localStorage.getItem("currentUser"))
   
   public selectedIndex = 0;
   public appPages = [
@@ -34,10 +35,15 @@ export class AppComponent implements OnInit {
     icon: 'list'
   },
   {
-    title: 'User-Profile',
+    title: 'My-Profile',
     url: 'user-profile',
     icon: 'person'
   },
+  {
+    title: 'Log-Out',
+    url: 'login',
+    icon: 'exit'
+  }
   ];
   
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -68,7 +74,7 @@ export class AppComponent implements OnInit {
 
   private loading;
   ngOnInit() {
-      this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
+    console.log("called");
     if(!this.userInfo){
       this._router.navigate(['/login']);
     }else{
@@ -77,6 +83,7 @@ export class AppComponent implements OnInit {
       this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
       this._router.navigate(['/']);
     }
+    
 
     this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
       if (this.constructor.name == "DashboardPage") {
@@ -116,14 +123,5 @@ export class AppComponent implements OnInit {
     });
   }
 
-   logout() {
-    console.log("logiut ccalled");
-    this.loginService.logout();
-    this._router.navigate(['login']);
-    localStorage.removeItem('branchSelected');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('olddate');
-    localStorage.removeItem('date');
-
-  }
 }
+

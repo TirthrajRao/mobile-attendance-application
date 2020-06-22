@@ -51,7 +51,7 @@ export class DashboardPage implements OnInit {
 	constructor(private _logService: LogsService, private _router: Router, private platform: Platform, public _loginService: LoginService,
 		private _loadingController: LoadingController, private _navCtrl: NavController, public _toast: ToastController, public alertController: AlertController
 		) { 
-
+		console.log("hello");
 		this.checkIp();
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		if(!this.userInfo){
@@ -67,8 +67,19 @@ export class DashboardPage implements OnInit {
 			}
 		})
 
+		this._loadingController.create({
+			message: "Loading..."
+		}).then((loading) => {
+			loading.present();
+
+			setTimeout(() => {
+				loading.dismiss();
+			}, 3000);
+		});		
+
 		if(this.userInfo.userRole != 'admin'){
 			this.getCurrentDateLogById();
+			this.getLastFiveDaysAttendance();
 		}
 	}
 
@@ -157,17 +168,15 @@ export class DashboardPage implements OnInit {
 		this._loginService.getIpCliente().subscribe((response)=>{
 		},(err)=>{
 			console.log("this --------------> ",err);
-			if(err.error.text == '119.160.195.171' || err.error.text == '1.38.72.84' || err.error.text == '114.31.188.173' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
+			if(err.error.text == '119.160.195.171' || err.error.text == '1.38.72.84' || err.error.text == '114.31.188.107' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
 				this.loginFlag = true;
 				this.userInfo['loginFlag'] = true;
 				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
-				// alert(err.error.text + " --> Valid IP");	
 			}
 			else{	
 				this.loginFlag = false;
 				this.userInfo['loginFlag'] = false;
 				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
-				// alert(err.error.text + " ---> Invalid IP");
 			}
 		});
 	}
@@ -192,9 +201,8 @@ export class DashboardPage implements OnInit {
 			this.MarkAttendance();
 		}
 	}
-	MarkAttendance(){
 
-	// fillAttendance(){
+	MarkAttendance(){
 		this._logService.fillAttendance().subscribe((response:any) =>{
 			console.log("response ====>" , response);
 
@@ -215,7 +223,7 @@ export class DashboardPage implements OnInit {
 					}
 				});
 				console.log("IN IFFFFFFFFFFFFF =============?", this.fiveDaysLogs);
-				
+
 			}
 			if(flag == 0 && this.fiveDaysLogs){
 				this.fiveDaysLogs.unshift(this.filledAttendanceLog[0]);
@@ -248,6 +256,19 @@ export class DashboardPage implements OnInit {
 			}
 		} , (err) =>{
 			console.log("err ===>" , err);
+		});
+	}
+
+	getLastFiveDaysAttendance(){
+		var id = 0;
+		this._logService.getLastFiveDaysAttendance(id).subscribe((response:any) => {
+			console.log("the last five day logs is ===>" , response);
+			if(response.message != 'No logs found'){
+				this.fiveDaysLogs = this.properFormatDate(response.foundLogs);
+				this.fiveDaysLogs = this.fiveDaysLogs.reverse();  
+			}
+		} ,(err) => {
+			console.log("last five days error" , err);
 		});
 	}
 

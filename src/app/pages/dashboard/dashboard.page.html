@@ -61,15 +61,15 @@
 						<tbody>
 							<ng-container>
 								<div id="clock"></div>
-								<tr *ngFor="let data of dates ; let i = index">
-									<td scope="row">
-										{{data.date}}
-									</td>
+								<tr *ngFor="let data of fiveDaysLogs ; let i = index">
+									<th scope="row">
+										{{ data.date }}
+									</th>
 									<td>
 										{{data.day}}
 									</td>
 									<td>
-										{{data.lastLog}}
+										{{data.diffrence}}
 									</td>
 								</tr>
 							</ng-container>
