@@ -88,27 +88,19 @@
 								</div>
 							</div>
 
-							<div class="text-center">
-								<button type="button" (click)="updateUser()" class="btn btn-primary my-4 mb--1">Update User</button>
+							<div class="row">
+								<div class="profile-card-ctr col-7">
+									<button type="button" (click)="updateUser()" class="profile-card__button button--blue">Update Profile</button>
+								</div>
+								<div class="col-5">
+									<button class="ml-3 profile-card__button_cancel button--blue" routerLink="/user-profile">Cancel</button>
+								</div>
 							</div>
 						</form>
 					</div>
 				</div>
 			</ion-card-content>
 		</ion-card>
-
-		<!-- Footer -->
-		<footer class="footer">
-			<div class="row align-items-center justify-content-xl-between">
-				<div class="col-xl-6">
-					<div class="copyright text-center text-xl-left text-muted">
-						&copy; 2019 <a href="https://raoinformationtechnology.com/" class="font-weight-bold ml-1" target="_blank">Rao Infotech</a>
-					</div>
-				</div>
-
-			</div>
-		</footer>	
-
 
 		<!-- Password Change Modal -->
 		<div id="exampleModal" class="modal mt-5">
@@ -124,7 +116,6 @@
 						<div class="card-body px-lg-5 py-lg-5">
 							<form [formGroup]="passForm" role="form">
 								<div class="form-group">
-									<ion-icon name="eye-off"></ion-icon>
 									<h5 class="text-muted pass_modal">Old Password:</h5>
 									<div class="input-group password_modal input-group-merge input-group-alternative">
 										<div class="input-group-prepend">
@@ -140,8 +131,6 @@
 											<ion-icon name="eye-off" *ngIf="!show"></ion-icon>
 										</button>
 									</div>
-									<div class="text-red pass_text" *ngIf="this.passForm.value.oldPassword != this.edit.password ? true : false">Password Do Not Match</div>
-									<div class="text-green pass_text" *ngIf="this.passForm.value.oldPassword == this.edit.password ? true : false">Password Match</div>
 								</div>
 								<hr>
 								<div class="form-group mb-3">
@@ -169,7 +158,6 @@
 										</div>
 										<input class="form-control" id="txtConfirmPassword" *ngIf="this.edit.password == this.passForm.value.oldPassword ? true : false" formControlName="confirmPassword" name="confirmPassword" placeholder="Confirm Password" type="password">
 									</div>
-									<span *ngIf="this.passForm.value.newPassword != this.passForm.value.confirmPassword ? true : false" class="text-red pass_text">Password do not match</span>
 								</div>
 								<div class="text-center">
 									<button type="button" (click)="updatePass(passForm.value)"  [disabled]="this.passForm.value.newPassword != this.passForm.value.confirmPassword ? true : false" data-dismiss="modal" class="btn btn-primary my-3">Update Password</button>

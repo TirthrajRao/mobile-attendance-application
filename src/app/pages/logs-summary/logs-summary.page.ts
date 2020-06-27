@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {NgxPaginationModule} from 'ngx-pagination';
-import { Platform, NavController, LoadingController, ToastController } from '@ionic/angular';
+import { Platform, NavController, LoadingController, ToastController, MenuController } from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
 import { LoginService } from 'src/app/services/login.service';
 import * as moment from 'moment';
@@ -34,90 +34,26 @@ export class LogsSummaryPage implements OnInit {
 	totalHoursToWork:any;
 	totalHoursWorked:any;
 	totalHoursToEmp:any;
-
+	fiveDaysLogs:any;
+	todaysAttendance:any;
 	allEmployeesLogs : any = [];
 	absentEmp:any = [];
 	totalEmployees:any;
 	minDate:any;
 	maxDate:any;
+	skeleton:any;
 
 	constructor(public _logService: LogsService , private route: ActivatedRoute,
-		private router: Router , public _loginService: LoginService , private http: HttpClient,public _toast: ToastController
+		private router: Router , public _loginService: LoginService , private http: HttpClient,
+		public _toast: ToastController, public menuctl: MenuController
 		) { }
 	
 	ngOnInit() {
+		this.ionViewWillEnter();
+
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		var branchName = localStorage.getItem('branchSelected');
-		$(document).ready(() => {
-			var self = this;
-
-			if(branchName == 'rajkot'){
-
-				$("#rajkot").addClass( "active");
-				$("#ahemdabad").removeClass("active");
-			}else{
-				console.log("hey");
-				$("#ahemdabad").addClass("active");
-				$("#rajkot").removeClass("active");
-			}
-
-			$(function() {
-
-				var start = moment().startOf('month');
-				console.log("the moment of date is ======>", start);
-				var end = moment().endOf('month');
-				console.log("the moment of end is =======>", end);
-				function cb(start, end) {
-					console.log("the start is +++++++++++++++++++++++>", start);
-					if(self.userInfo.userRole != 'admin')
-						self.getRangeDate(start, end);
-				}
-
-				var element = <HTMLInputElement> document.getElementById("example2");
-				element.disabled = true;
-
-				$('#example1').datepicker({
-					todayHighlight: true,
-					autoclose: true,
-					format: "mm/dd/yyyy",
-					clearBtn : true,
-				}).on('show', function(e){
-					var date = $('#example2').datepicker('getDate');
-					if(date){
-						$('#example1').datepicker('setEndDate', date);
-					}
-				}).on('changeDate', function(selected){
-					$('#example1').val();
-					self.minDate = selected.date;
-					var element = <HTMLInputElement> document.getElementById("example2");
-					$('#enddate').datepicker('setStartDate', this.minDate)
-					if($('#example1').val()) {
-						element.disabled = false;
-					}
-					else {
-						element.disabled = true;	
-					}
-				});
-
-				$('#example2').datepicker({
-					todayHighlight: true,
-					autoclose: true,
-					format: "mm/dd/yyyy",
-					clearBtn : true,
-				}).on('show', function(e){
-					var date = $('#example1').datepicker('getDate');
-					if(date){
-						$('#example2').datepicker('setStartDate', date);
-					}
-				}).on('changeDate', function(selected) {
-					self.maxDate = selected.date;
-					$('#startdate').datepicker('setEndDate', this.maxDate);
-					if(self.userInfo.userRole != 'admin')
-						self.getRangeDate(start, end);	
-				});
-				cb(start, end);
-			})
-		});
+		
 		if(this.userInfo.userRole == 'admin'){
 			this.search = false;
 		}
@@ -138,6 +74,12 @@ export class LogsSummaryPage implements OnInit {
 		}, (err) => {
 			console.log("err of getLogsByMonthDefault ==>" , err);
 		});
+	}
+
+	openModel(index){
+		console.log("hey" , index);
+		this.modelValue = this.logs[index];
+		$('#myModal').modal('show');
 	}
 
 	getRangeDate(start, end){
@@ -185,7 +127,6 @@ export class LogsSummaryPage implements OnInit {
 				this.logs = res;
 				this.totalHoursToWork = "No Log Found";
 				this.totalHoursToEmp = "No Log Found";
-				console.log("the logs is res equal is :====>",this.logs);
 			}
 
 		} , (err)=>{
@@ -268,5 +209,72 @@ export class LogsSummaryPage implements OnInit {
 				return  'black'
 			}
 		}
+	}
+
+	ionViewWillEnter() {
+		setTimeout(() => {
+			this.skeleton = {
+				'heading': 'Normal text',
+				'para1': 'Lorem ipsum dolor sit amet, consectetur',
+				'para2': 'adipiscing elit.'
+			};
+			$(document).ready(() => {
+				var self = this;
+
+				$(function() {
+
+					var start = moment().startOf('month');
+					var end = moment().endOf('month');
+					function cb(start, end) {
+						if(self.userInfo.userRole != 'admin')
+							self.getRangeDate(start, end);
+					}
+
+					var element = <HTMLInputElement> document.getElementById("example2");
+					element.disabled = true;
+
+					$('#example1').datepicker({
+						todayHighlight: true,
+						autoclose: true,
+						format: "mm/dd/yyyy",
+						clearBtn : true,
+					}).on('show', function(e){
+						var date = $('#example2').datepicker('getDate');
+						if(date){
+							$('#example1').datepicker('setEndDate', date);
+						}
+					}).on('changeDate', function(selected){
+						$('#example1').val();
+						self.minDate = selected.date;
+						var element = <HTMLInputElement> document.getElementById("example2");
+						$('#enddate').datepicker('setStartDate', this.minDate)
+						if($('#example1').val()) {
+							element.disabled = false;
+						}
+						else {
+							element.disabled = true;	
+						}
+					});
+
+					$('#example2').datepicker({
+						todayHighlight: true,
+						autoclose: true,
+						format: "mm/dd/yyyy",
+						clearBtn : true,
+					}).on('show', function(e){
+						var date = $('#example1').datepicker('getDate');
+						if(date){
+							$('#example2').datepicker('setStartDate', date);
+						}
+					}).on('changeDate', function(selected) {
+						self.maxDate = selected.date;
+						$('#startdate').datepicker('setEndDate', this.maxDate);
+						if(self.userInfo.userRole != 'admin')
+							self.getRangeDate(start, end);	
+					});
+					cb(start, end);
+				})
+			});
+		}, 4000);
 	}
 }

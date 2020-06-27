@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import  { config } from '../config'; 
 import * as moment from 'moment';
 import {BehaviorSubject, Subject } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
-export class LogsService {
 
+export class LogsService {
   currentTime:any;
   lastDate:any;
   body:any;
@@ -19,8 +20,7 @@ export class LogsService {
     this._UserMessageSource.next(message);
   }
 
-  constructor(public _http: HttpClient,
-    ) { 
+  constructor(public _http: HttpClient) { 
     this.lastDate = moment(). format('DD/MM/YYYY');
     if (JSON.parse(localStorage.getItem('olddate'))) {
       this.currentTime = JSON.parse(localStorage.getItem('olddate'));
@@ -41,19 +41,16 @@ export class LogsService {
       this.body = {
         userId : JSON.parse(localStorage.getItem('currentUser'))._id,
         loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,  
-      }
-      console.log("Body Of Fill attendace true",  this.body); 
+      } 
     }
     else {
       this.currentTime = JSON.parse(localStorage.getItem('olddate'));
       if (this.lastDate === this.currentTime.date) {
-        console.log("the currentTime is the date is =====>", this.currentTime.date);
         this.body = {
           userId : JSON.parse(localStorage.getItem('currentUser'))._id,
           loginFlag : JSON.parse(localStorage.getItem('currentUser')).loginFlag,  
           lastLog: JSON.parse(localStorage.getItem('olddate')).lastLog,
         }
-        console.log("Body Of Fill attendace false",  this.body); 
       }
     }
     return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , this.body);	

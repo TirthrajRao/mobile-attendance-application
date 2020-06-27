@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LogsService } from 'src/app/services/logs.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
+import { MenuController } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login.service';
 import { HttpClient } from '@angular/common/http';
 
@@ -19,12 +20,12 @@ export class EditProfilePage implements OnInit {
 	show:boolean = false;
 	password:any;
 	userId:any;
+	message:any;
 
 	constructor(public _logsService: LogsService, public _router: Router, public _route: ActivatedRoute, public _fb: FormBuilder,
-		public _loginService: LoginService, private http: HttpClient
+		public _loginService: LoginService, private http: HttpClient, public menuctl: MenuController
 		) { 
 		this.userInfo = JSON.parse(localStorage.getItem('currentUser'));
-		this.userId = this._route.snapshot.paramMap.get('id');
 		this.editForm = new FormGroup({
 			userRole: new FormControl('', [Validators.required]),
 			branch: new FormControl(null),
@@ -46,7 +47,7 @@ export class EditProfilePage implements OnInit {
 	}
 
 	getEmpData(){
-		this._logsService.getUserById(this.userId).subscribe((res:any) => {
+		this._logsService.getUserById(this.userInfo._id).subscribe((res:any) => {
 			this.edit = res;	
 			console.log("the user response is =====>", res);
 		},(err) => {
@@ -65,27 +66,19 @@ export class EditProfilePage implements OnInit {
 	}
 
 	updateUser(){
-		var Id = this.userId
-		console.log("the all Edit data is ======>", this.edit);
-		this._logsService.getEditById(this.userId, this.edit).subscribe((res:any) => {
-			console.log("the edit data is: =====>", res);
-					this._router.navigate(['user-profile']);
-				    this._logsService.sendMessage(res);
+		this._logsService.getEditById(this.userInfo._id, this.edit).subscribe((res:any) => {
+			console.log("the getEditById data is: =====>", res);
+			localStorage.setItem("currentUser", JSON.stringify(res));
+			this._router.navigate(['user-profile']);
+			this._logsService.sendMessage(res);
 		}, (err) => {
-			console.log("the edit data err is: ===>", err);
+			console.log("the getEditById of err is: ===>", err);
 		});
 	}
 
 	updatePass(userInfo){		
 		this.userInfo.password = this.passForm.value.confirmPassword;
-		console.log("the edit data is: =====>", this.userInfo.password);
 		this.edit = this.userInfo;
 		this.passForm.reset();
-	}
-
-	logout() {
-		console.log("logiut called");
-		this._loginService.logout();
-		this._router.navigate(['login']);
 	}
 }

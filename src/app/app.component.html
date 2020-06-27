@@ -1,4 +1,4 @@
-<ion-app>
+ <ion-app>
   <ion-menu contentId="main" menuId="main-menu" type="overlay" class="demo">
     <ion-content>
       <div class="menu-header-bg"></div>
@@ -11,6 +11,12 @@
           <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
             <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
             <ion-label>{{ p.title }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle auto-hide="false">
+          <ion-item (click)="logout()" lines="none" detail="false">
+            <ion-icon slot="start" name="exit"></ion-icon>
+            <ion-label>Log out</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-list>

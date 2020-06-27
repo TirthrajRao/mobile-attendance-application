@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Platform, NavController, ActionSheetController, ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { Platform, NavController,ActionSheetController, MenuController, ToastController, LoadingController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
@@ -21,8 +21,9 @@ export class AppComponent implements OnInit {
   timePeriodToExit = 2000;
   subscribe:any;
   userInfo = JSON.parse(localStorage.getItem("currentUser"))
-  
   public selectedIndex = 0;
+
+
   public appPages = [
   {
     title: 'Dashboard',
@@ -39,11 +40,6 @@ export class AppComponent implements OnInit {
     url: 'user-profile',
     icon: 'person'
   },
-  {
-    title: 'Log-Out',
-    url: 'login',
-    icon: 'exit'
-  }
   ];
   
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -58,8 +54,12 @@ export class AppComponent implements OnInit {
     private toast: ToastController,
     private loginService: LoginService,
     private _loadingController: LoadingController,
-    public alertController: AlertController
+    public alertController: AlertController,
+    public menuCtrl: MenuController,
+
     )  {
+    this.selectedIndex = 0;
+    
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
     this.initializeApp();
     
@@ -74,9 +74,9 @@ export class AppComponent implements OnInit {
 
   private loading;
   ngOnInit() {
-    console.log("called");
     if(!this.userInfo){
       this._router.navigate(['/login']);
+      console.log("the app is called");
     }else{
       console.log("called 2nd time");
       console.log(this.userInfo);
@@ -84,14 +84,13 @@ export class AppComponent implements OnInit {
       this._router.navigate(['/']);
     }
     
-
     this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
       if (this.constructor.name == "DashboardPage") {
         if (window.confirm("do you want to exit app")) {
           navigator["app"].exitApp();
         }
       }
-    })
+    });
   }
 
   backButtonEvent() {
@@ -123,5 +122,11 @@ export class AppComponent implements OnInit {
     });
   }
 
+  logout(){
+    localStorage.removeItem('currentUser');
+    this.loginService.logout();
+    this._router.navigate(['login']);
+    this.selectedIndex = 0;
+  }
 }
 

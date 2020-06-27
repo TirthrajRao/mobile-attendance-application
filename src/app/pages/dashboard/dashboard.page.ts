@@ -1,6 +1,6 @@
 import { Component, OnInit, Output , Input, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Platform, NavController, LoadingController, ToastController } from '@ionic/angular';
+import { Platform, NavController, LoadingController, ToastController, MenuController } from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
 import { interval, Subscription } from 'rxjs';
 import { EventEmitter } from '@angular/core';
@@ -42,16 +42,18 @@ export class DashboardPage implements OnInit {
 		date: "",
 		day: "",
 		lastLog: ""
-	}
+	};
+	todaysAttendance : any
 	timeflag
 	data:any;
 	subscribe:any;
 	private loading;
 
 	constructor(private _logService: LogsService, private _router: Router, private platform: Platform, public _loginService: LoginService,
-		private _loadingController: LoadingController, private _navCtrl: NavController, public _toast: ToastController, public alertController: AlertController
-		) { 
-		console.log("hello");
+		private _loadingController: LoadingController, private _navCtrl: NavController, public _toast: ToastController,
+		public alertController: AlertController, public menuctl: MenuController
+		) {
+		
 		this.checkIp();
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		if(!this.userInfo){
@@ -66,16 +68,6 @@ export class DashboardPage implements OnInit {
 				}
 			}
 		})
-
-		this._loadingController.create({
-			message: "Loading..."
-		}).then((loading) => {
-			loading.present();
-
-			setTimeout(() => {
-				loading.dismiss();
-			}, 3000);
-		});		
 
 		if(this.userInfo.userRole != 'admin'){
 			this.getCurrentDateLogById();
@@ -95,7 +87,7 @@ export class DashboardPage implements OnInit {
 				'para1': 'Lorem ipsum dolor sit amet, consectetur',
 				'para2': 'adipiscing elit.'
 			};
-		}, 5000);
+		}, 4000);
 	}
 
 	getCurrentDateLogById(){
@@ -105,7 +97,6 @@ export class DashboardPage implements OnInit {
 			if(response.length){
 				this.filledAttendanceLog = this.properFormatDate(response);
 				console.log("the filledAttendanceLog is =======>", this.filledAttendanceLog);
-				// this.filledAttendanceLog = response;
 
 				var timeLogLength = this.filledAttendanceLog[0].timeLog.length - 1;
 				console.log(timeLogLength);
@@ -115,10 +106,8 @@ export class DashboardPage implements OnInit {
 					this.entry = false;
 					this.closedata();
 				}else{
-					console.log("the oldseconds and current seconds diffrence is ====>", this.milseconds);
 					this.dateStore();
 					if (this.timeString < this.milseconds) {
-						console.log("the difftime is true");
 						this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
 						this.exit = false;
 						this.MarkAttendance();
@@ -126,7 +115,6 @@ export class DashboardPage implements OnInit {
 					else {
 						this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in; 
 						this.exit = false;	
-						console.log("the diffTime is false");
 					}
 					this.opensnack();
 				}
@@ -141,25 +129,18 @@ export class DashboardPage implements OnInit {
 		var hours = dateObj.getUTCHours(); 
 		var minutes = dateObj.getUTCMinutes(); 
 		var seconds = dateObj.getSeconds(); 
-		this.timeString = hours.toString().padStart(2, '0') + 
-		":" + minutes.toString().padStart(2, '0') 
+		this.timeString = hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0') 
 		+ ':' + seconds.toString().padStart(2, '0'); 
 
-		console.log("the time string is =======>", this.timeString);
-		
 		if (localStorage.getItem('olddate')) {
 			this.olddateCom = JSON.parse(localStorage.getItem('olddate'));
-			console.log("the olddateCom is ======>", this.olddateCom);
 
 			var datesCurrent = moment().format("LTS");
-			console.log("the dates demo is ====>", datesCurrent);
 			var start = moment.utc(this.olddateCom.lastLog, "hh:mm:ss");
 			var end = moment.utc(datesCurrent, "hh:mm:ss");
 			var dateDiffrence = moment.duration(end.diff(start));
-			console.log("the date dateDiffrence is the ==============>", dateDiffrence);
 			this.secondsdata.push(dateDiffrence);
 			this.milseconds = moment("1900-01-01 00:00:00").add(this.secondsdata[0]._milliseconds/1000, 'seconds').format("HH:mm:ss")
-			console.log("the oldsecond and current seconds diffrence is ===>", this.milseconds);
 		}
 	}
 
@@ -168,7 +149,7 @@ export class DashboardPage implements OnInit {
 		this._loginService.getIpCliente().subscribe((response)=>{
 		},(err)=>{
 			console.log("this --------------> ",err);
-			if(err.error.text == '119.160.195.171' || err.error.text == '1.38.72.84' || err.error.text == '114.31.188.107' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
+			if(err.error.text == '119.160.195.171' || err.error.text == '1.38.72.84' || err.error.text == '114.31.184.117' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
 				this.loginFlag = true;
 				this.userInfo['loginFlag'] = true;
 				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
@@ -237,26 +218,33 @@ export class DashboardPage implements OnInit {
 			if(lastRecord != '-'){
 				if (this.timeflag == true) {
 					this.exit = this.olddateCom.lastLog; 
-					console.log("the exit of function is ====>", this.exit);
 					this.entry = false;
 					this.closedata();
 				}
 				else {
 					this.exit = this.filledAttendanceLog[0].timeLog[timeLogLength].out; 
-					console.log("the exit of function is ====>", this.exit);
 					this.entry = false;
 					this.closedata();
 				}
 			}
 			else {
 				this.entry = this.filledAttendanceLog[0].timeLog[timeLogLength].in;
-				console.log("the entry function is ===>", this.entry); 
 				this.exit = false;
 				this.opensnack();
 			}
 		} , (err) =>{
 			console.log("err ===>" , err);
 		});
+	}
+
+	openModel(index){
+		console.log("hey" , index);
+		if(!this.userInfo.userRole || this.userInfo.userRole == 'employee')
+			this.modelValue = this.fiveDaysLogs[index];
+		else{
+			this.modelValue = this.todaysAttendance[index];
+		}
+		$('#myModal').modal('show');
 	}
 
 	getLastFiveDaysAttendance(){
@@ -328,8 +316,6 @@ export class DashboardPage implements OnInit {
 		this.subscription = this.platform.backButton.subscribe(()=>{
 			navigator['app'].exitApp();
 		});
-
-
 	}
 
 	ionViewWillLeave(){

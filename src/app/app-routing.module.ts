@@ -24,7 +24,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/logs-summary/logs-summary.module').then( m => m.LogsSummaryPageModule)
   },
   {
-    path: 'edit-profile/:id',
+    path: 'edit-profile',
     loadChildren: () => import('./pages/edit-profile/edit-profile.module').then( m => m.EditProfilePageModule)
   },
   {

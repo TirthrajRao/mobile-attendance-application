@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="skeleton">
 	<ion-toolbar>
 		<ion-buttons slot="start">
 			<ion-menu-button></ion-menu-button>
@@ -9,86 +9,151 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content color="primary">
-	<div class="container-fluid mt-5" *ngIf="edit">
-		<div class="emp-profile">
-			<div class="row">
-				<div class="col-7">
-					<h6 style="color: black; " *ngIf="userInfo">
-						{{edit.name}}
-					</h6>
-					<p style="color: black; font-size: 15px;" *ngIf="userInfo">
-						{{edit.designation}}
-					</p>
-				</div>
-				<div class="col-5">
-					<h1 class="text-center">
-						<button class="btn btn-sm btn-primary profile-edit-btn p-2 text-white" type="submit" (click)="editProfile()" value="Edit Profile">Edit Profile</button>
-					</h1>
+<ion-content color="primary" *ngIf="skeleton">
+	<div class="container mt-5 mb-5">
+		<div class="card-item">
+			<div class="card-header">
+				<div class="card-header__bg"></div>
+				<img src="/assets/icon/default-profile.png" class="card-header__img">
+				<div class="card-header__text">
+					<span class="card-header__name">
+						{{name}}
+					</span>
+					<span class="card-header__job">
+						{{designation}}
+					</span>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xl-12">
-					<form [formGroup]="myForm">
-						<div class="row">
-							<div class="col-xl-6">
-								<div class="form-group">
-									<label>E-mail : </label>
-									<div class="input-group input-group-merge input-group-alternative">
-										<input class="form-control user_profile" formControlName="email" [(ngModel)]="edit.email" placeholder="E-mail" type="text" readOnly>
-									</div>
-								</div>
+
+			<div class="profile-card__cnt">
+				<div class="container-fluid mt-5">
+					<div class="row text-dark">
+						<div class="col-4 pr-0">
+							<div class="mt-4">
+								<h6>E-mail : </h6>
 							</div>
-							<div class="col-xl-6">
-								<div class="form-group">
-									<label>Name : </label>
-									<div class="input-group input-group-merge input-group-alternative">
-										<input class="form-control user_profile" formControlName="name" [(ngModel)]="edit.name" placeholder="Name" type="text" readOnly>
-									</div>
-								</div>
+							<div class="mt-4">
+								<h6>Name : </h6>
 							</div>
-							<div class="col-xl-6">
-								<div class="form-group">
-									<label>Password : </label>
-									<div class="input-group input-group-merge input-group-alternative">
-										<input class="form-control user_profile" formControlName="password" [(ngModel)]="edit.password" placeholder="password" [type]="password" readonly>
-										<button class="btn btn-icon btn-default"  (click)="viewPass()" style="background: #172B4D; color: white; font-size: 15px;">
-											<ion-icon name="eye" *ngIf="show"></ion-icon>
-											<ion-icon name="eye-off" *ngIf="!show"></ion-icon>
-										</button>
-									</div>
-								</div>
+							<div class="mt-4">
+								<h6>Password : </h6>
 							</div>
-							<div class="col-xl-6">
-								<div class="form-group">
-									<label>Designation : </label>
-									<div class="input-group input-group-merge input-group-alternative">
-										<input class="form-control user_profile" formControlName="designation" placeholder="Designation" [(ngModel)]="edit.designation" type="text" readOnly>
-									</div>
-								</div>
+							<div class="mt-4">
+								<h6>Designation : </h6>
 							</div>
-							<div class="col-xl-6">
-								<div class="row">
-									<div class="col-6">
-										<div class="form-group">
-											<label>User Role : </label>
-											<div class="input-group input-group-merge input-group-alternative">
-												<input class="form-control user_profile" formControlName="userRole" [(ngModel)]="edit.userRole" placeholder="User Role" type="text" readOnly>
-											</div>
-										</div>
-									</div>
-									<div class="col-6">
-										<div class="form-group">
-											<label>Branch : </label>
-											<div class="input-group input-group-merge input-group-alternative">
-												<input class="form-control user_profile" formControlName="branch" [(ngModel)]="edit.branch" placeholder="branch" type="text" readOnly>
-											</div>
-										</div>
-									</div>
+							<div class="mt-4">
+								<h6>User Role : </h6>
+							</div>
+							<div class="mt-4">
+								<h6>Branch : </h6>
+							</div>
+						</div>
+						<div class="col-8 pl-0" *ngIf="allUser">
+							<div *ngFor="let val of allData" >
+								<div class="mt-4">
+									<h6 >{{val.email}}</h6>
+								</div>
+								<div class="mt-4">
+									<h6 >{{val.name}}</h6>
+								</div>
+								<div class="mt-4">
+									<h6 >{{val.password}}</h6>
+								</div>
+								<div class="mt-4">
+									<h6 >{{val.designation}}</h6>
+								</div>
+								<div class="mt-4">
+									<h6 >{{val.userRole}}</h6>
+								</div>
+								<div class="mt-4">
+									<h6 >{{val.branch}}</h6>
 								</div>
 							</div>
 						</div>
-					</form>
+					</div>
+				</div>
+				<div class="profile-card-ctr text-center m-auto">
+					<button class="profile-card__button button--blue" (click)="editProfile()">Update Profiles</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</ion-content>
+
+<ion-header *ngIf="!skeleton">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+		</ion-buttons>
+		<ion-title>
+			My-Profile
+		</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content color="primary" *ngIf="!skeleton">
+	<div class="container mt-5">
+		<div class="card-item">
+			<div class="card-header">
+				<div class="card-header__bg"></div>
+				<img src="/assets/icon/default-profile.png" class="card-header__img">
+				<div class="card-header__text">
+					<span class="card-header__name">
+						<ion-skeleton-text animated style="width: 40%; margin: auto; height: 15px;"></ion-skeleton-text>
+					</span>
+					<span class="card-header__job mt-1">
+						<ion-skeleton-text animated style="width: 50%; margin: auto; height: 15px;"></ion-skeleton-text>
+					</span>
+				</div>
+			</div>
+			
+			<div class="profile-card__cnt">
+				<div class="container-fluid mt-5 mb-5">
+					<div class="row text-dark">
+						<div class="col-4 pr-0">
+							<div class="mt-4">
+								<h6><ion-skeleton-text animated style="width: 40%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6><ion-skeleton-text animated style="width: 50%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6><ion-skeleton-text animated style="width: 45%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6><ion-skeleton-text animated style="width: 50%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6><ion-skeleton-text animated style="width: 45%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6><ion-skeleton-text animated style="width: 50%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+						</div>
+						<div class="col-8 pl-0">
+							<div class="mt-4">
+								<h6 ><ion-skeleton-text animated style="width: 70%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6 ><ion-skeleton-text animated style="width: 50%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6 ><ion-skeleton-text animated style="width: 45%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6 ><ion-skeleton-text animated style="width: 65%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6 ><ion-skeleton-text animated style="width: 50%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+							<div class="mt-4">
+								<h6 ><ion-skeleton-text animated style="width: 40%; margin: auto; height: 15px;"></ion-skeleton-text></h6>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="profile-card-ctr text-center m-auto">
+					<button class="profile-card__button button--blue" (click)="editProfile()">Update Profiles</button>
 				</div>
 			</div>
 		</div>

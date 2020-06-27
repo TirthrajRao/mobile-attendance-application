@@ -33,6 +33,7 @@
     "cordova-res": "^0.13.1",
     "core-js": "^2.5.4",
     "daterangepicker": "^3.0.5",
+    "ionic-angular": "^3.9.10",
     "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.3.2",

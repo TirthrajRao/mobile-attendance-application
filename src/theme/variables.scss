@@ -226,3 +226,10 @@
     --ion-tab-bar-background: #1f1f1f;
   }
 }
+
+$loading-ios-background: transparent;
+$loading-md-background: $loading-ios-background;
+$loading-wp-background: $loading-ios-background;
+$loading-md-box-shadow: none;
+$loading-md-background: transparent;
+

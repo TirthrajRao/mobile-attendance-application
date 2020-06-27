@@ -4,7 +4,8 @@ import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
 import { LogsService } from 'src/app/services/logs.service';
 import { LoginService } from 'src/app/services/login.service';
 import { HttpClient } from '@angular/common/http';
-
+import { Platform, LoadingController, ToastController, MenuController } from '@ionic/angular';
+import { EditProfilePage } from 'src/app/pages/edit-profile/edit-profile.page';
 import * as moment from 'moment';
 declare var $:any;
 declare var Timeline:any
@@ -24,6 +25,16 @@ export class UserProfilePage implements OnInit {
   allData:any = [];
   data:any;
   skeleton:any;
+  name: any;
+  designation: any;
+  allUser:any = {
+    "branch": "",
+    "designation": "",
+    "email": "",
+    "name": "",
+    "password": "",
+    "userRole": "",
+  }
 
   constructor(
     public _router: Router,
@@ -32,50 +43,47 @@ export class UserProfilePage implements OnInit {
     public _loginService: LoginService,
     private http: HttpClient,
     private _logService: LogsService,
+    private _loadingController: LoadingController,
+    public menuctl: MenuController,
     ) {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'));
     this.edit = this.userInfo;
     this.userId = this.userInfo._id;
-    this.myForm = new FormGroup({
-      userRole: new FormControl('', [Validators.required]),
-      branch: new FormControl(null),
-      designation: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
-    });
   }
 
   ngOnInit() {
     this.getEmpData();
-    this.password = 'password';
-    
-    this._logService.usermessage$
-    .subscribe(
-      message => {
-        this.edit = message;
-      }
-    )
+    this.ionViewDidEnter();
+
+    this._logService.usermessage$.subscribe( message => {
+      this.edit = message;
+      this.allData[0] = this.edit;
+      this.name = this.edit.name;
+      this.designation = this.edit.designation;
+    });
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     setTimeout(() => {
       this.skeleton = {
         'heading': 'Normal text',
         'para1': 'Lorem ipsum dolor sit amet, consectetur',
         'para2': 'adipiscing elit.'
       };
-    }, 5000);
+    }, 4000);
   }
 
   getEmpData(){
     this._logService.getUserById(this.userId).subscribe((res:any) => {
-      this.edit = res;  
-      console.log("the user of response is =====>", res);
+      console.log("the getUserById of response is =====>", res);
+      this.allData[0] = res;  
+      this.name = res.name;
+      this.designation = res.designation;
     },(err) => {
-      console.log("the user of err is ===>", err);
+      console.log("the getUserById of err is ===>", err);
     });
   }
+
   viewPass() {
     if (this.password === 'password') {
       this.password = 'text';
@@ -87,11 +95,6 @@ export class UserProfilePage implements OnInit {
   }
 
   editProfile(){
-    this._router.navigate(['edit-profile', this.userId]);
-  }
-
-  logout() {
-    this._loginService.logout();
-    this._router.navigate(['login']);
+    this._router.navigate(['edit-profile']);
   }
 }

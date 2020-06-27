@@ -61,7 +61,7 @@
 						<tbody>
 							<ng-container>
 								<div id="clock"></div>
-								<tr *ngFor="let data of fiveDaysLogs ; let i = index">
+								<tr *ngFor="let data of fiveDaysLogs ; let i = index" id="viewMore" (click)="openModel(i)">
 									<th scope="row">
 										{{ data.date }}
 									</th>
@@ -79,6 +79,47 @@
 			</ion-card-content>
 		</ion-card>
 	</div>
+
+	<!-- The Modal -->
+	<div class="modal fade" id="myModal" >
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content text-dark">
+				
+				<!-- Modal Header -->
+				<div class="modal-header" *ngIf="modelValue">
+					<h5 class="modal-title">{{modelValue.day}} &nbsp;-&nbsp; {{modelValue.date}}</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<div class="modal-body" *ngIf="modelValue">
+					<h5 align="center" class="mb-1"><u>Time log </u></h5>
+					<div class="form-group" style="overflow: auto;  max-height: 350px">
+						<table align="center "  style="width: 100% " cellpadding="10px" *ngIf="modelValue">
+							<tr align="center">
+								<th>No.</th> 
+								<th>In</th>
+								<th>Out</th>
+							</tr>
+							<tr *ngFor="let time of modelValue.timeLog ; let i = index" align="center"> 
+								<td>{{i+1}}</td>
+								<td>{{time.in}}</td>
+								<td>{{time.out}}</td>
+							</tr>
+						</table>
+					</div>
+
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
 </ion-content>
 
 
@@ -89,7 +130,7 @@
 			<ion-menu-button menu="main-menu"></ion-menu-button>
 		</ion-buttons>
 		<ion-title>
-			    <ion-skeleton-text animated style="width: 60%; margin: auto; height: 15px;"></ion-skeleton-text>
+			Dashboard
 		</ion-title>
 	</ion-toolbar>
 
