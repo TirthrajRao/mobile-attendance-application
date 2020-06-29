@@ -54,12 +54,11 @@ export class DashboardPage implements OnInit {
 		public alertController: AlertController, public menuctl: MenuController
 		) {
 		
-		this.checkIp();
+		//this.checkIp();
 		this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
 		if(!this.userInfo){
 			this._router.navigate(['/login']);
 		}
-
 
 		this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
 			if (this.constructor.name == "DashboardPage") {
@@ -144,43 +143,43 @@ export class DashboardPage implements OnInit {
 		}
 	}
 
-	checkIp(){
-		console.log("hye in check");
-		this._loginService.getIpCliente().subscribe((response)=>{
-		},(err)=>{
-			console.log("this --------------> ",err);
-			if(err.error.text == '119.160.195.171' || err.error.text == '1.38.72.84' || err.error.text == '114.31.184.117' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
-				this.loginFlag = true;
-				this.userInfo['loginFlag'] = true;
-				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
-			}
-			else{	
-				this.loginFlag = false;
-				this.userInfo['loginFlag'] = false;
-				localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
-			}
-		});
-	}
+	//checkIp(){
+	//	console.log("hye in check");
+	//	this._loginService.getIpCliente().subscribe((response)=>{
+	//	},(err)=>{
+	//		console.log("this --------------> ",err);
+	//		if(err.error.text == '119.160.195.171' || err.error.text == '1.38.72.84' || err.error.text == '114.31.184.117' || err.error.text == '27.57.190.69' || err.error.text == '27.54.180.182' || err.error.text == '122.170.44.56' || err.error.text == '110.227.229.183'){
+	//			this.loginFlag = true;
+	//			this.userInfo['loginFlag'] = true;
+	//			localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
+	//		}
+	//		else{	
+	//			this.loginFlag = false;
+	//			this.userInfo['loginFlag'] = false;
+	//			localStorage.setItem('currentUser', JSON.stringify(this.userInfo));
+	//		}
+	//	});
+	//}
 
 	fillAttendance(){
-		if(JSON.parse(localStorage.getItem('currentUser')).loginFlag == false){
-			Swal.fire({
-				title: 'Are you sure?',
-				text: "Mark attendance from unauthorized IP address",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Yes, Mark Attendance!'
-			}).then((result) => {
-				if (result.value) {
-					this.MarkAttendance();
-				}
-			});
-		}
-		else{
+	//	if(JSON.parse(localStorage.getItem('currentUser')).loginFlag == false){
+	//		Swal.fire({
+	//			title: 'Are you sure?',
+	//			text: "Mark attendance from unauthorized IP address",
+	//			icon: 'warning',
+	//			showCancelButton: true,
+	//			confirmButtonColor: '#3085d6',
+	//			cancelButtonColor: '#d33',
+	//			confirmButtonText: 'Yes, Mark Attendance!'
+	//		}).then((result) => {
+	//			if (result.value) {
+	//				this.MarkAttendance();
+	//			}
+	//		});
+	//	}
+	//	else{
 			this.MarkAttendance();
-		}
+	//	}
 	}
 
 	MarkAttendance(){
