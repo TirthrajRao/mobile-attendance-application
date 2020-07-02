@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {NgxPaginationModule} from 'ngx-pagination';
-import { Platform, NavController, LoadingController, ToastController, MenuController } from '@ionic/angular';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { Platform, NavController, IonRouterOutlet, ActionSheetController } from '@ionic/angular';
 import { LogsService } from 'src/app/services/logs.service';
 import { LoginService } from 'src/app/services/login.service';
+import {  ViewChildren, QueryList } from '@angular/core';
 import * as moment from 'moment';
-import { HttpClient } from '@angular/common/http';
 
 declare var $;
 
@@ -15,38 +15,44 @@ declare var $;
 	styleUrls: ['./logs-summary.page.scss'],
 })
 export class LogsSummaryPage implements OnInit {
-	searchData : any;
 	userInfo : any;
 	currentMonthLogs  ;
 	currentMonthLogsCount = [] ;
-	modelValue : any ;
+	modelValue : any;
 	p: number = 1;
-
-	data = {
-		firstDate : "",
-		secondDate : "",
-		name: ""
-	};
-	previousData : any;
 	logs : any;
 	flag = false;
 	search:any;
 	totalHoursToWork:any;
 	totalHoursWorked:any;
 	totalHoursToEmp:any;
-	fiveDaysLogs:any;
-	todaysAttendance:any;
-	allEmployeesLogs : any = [];
-	absentEmp:any = [];
-	totalEmployees:any;
+	lastTimeBackPress = 0;
+	timePeriodToExit = 2000;
 	minDate:any;
 	maxDate:any;
 	skeleton:any;
+	subscribe:any;
+	data = {
+		firstDate : "",
+		secondDate : "",
+		name: ""
+	};
 
-	constructor(public _logService: LogsService , private route: ActivatedRoute,
-		private router: Router , public _loginService: LoginService , private http: HttpClient,
-		public _toast: ToastController, public menuctl: MenuController
-		) { }
+	@ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
+
+	constructor(public _logService: LogsService , private route: ActivatedRoute,private router: Router,
+		public _loginService: LoginService,public platform: Platform, public actionSheetCtrl: ActionSheetController
+		) { 
+		this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
+			if (this.constructor.name == "LogsSummaryPage") {
+				if (window.confirm("do you want to exit app")) {
+					navigator["app"].exitApp();
+				}
+			}
+		});
+
+		this.backButtonEvent();
+	}
 	
 	ngOnInit() {
 		this.ionViewWillEnter();
@@ -57,6 +63,28 @@ export class LogsSummaryPage implements OnInit {
 		if(this.userInfo.userRole == 'admin'){
 			this.search = false;
 		}
+	}
+
+	backButtonEvent() {
+		this.platform.backButton.subscribe(async () => {
+			try {
+				const element = await this.actionSheetCtrl.getTop();
+				if (element) {
+					element.dismiss();
+					return;
+				}
+			} catch (error) {
+			}
+			this.routerOutlets.forEach((outlet: IonRouterOutlet) => {
+				if (outlet && outlet.canGoBack()) {
+					outlet.pop();
+				} else if (this.router.url === 'LogsSummaryPage') {
+					if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
+						navigator['app'].exitApp(); 
+					}
+				}
+			});
+		});
 	}
 
 	getLogsCountByMonthDefault(){

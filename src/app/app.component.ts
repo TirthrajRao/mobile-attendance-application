@@ -1,13 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Platform, NavController,ActionSheetController, MenuController, ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { Platform, IonRouterOutlet, ActionSheetController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import {  ViewChildren, QueryList } from '@angular/core';
-import { IonRouterOutlet } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -20,9 +20,9 @@ export class AppComponent implements OnInit {
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
   subscribe:any;
+  alert:any;
   userInfo = JSON.parse(localStorage.getItem("currentUser"))
   public selectedIndex = 0;
-
 
   public appPages = [
   {
@@ -42,24 +42,14 @@ export class AppComponent implements OnInit {
   },
   ];
   
+
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
   constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
-    private _router: Router,
-    private _nav: NavController,
-    private actionSheetCtrl: ActionSheetController,
-    private toast: ToastController,
-    private loginService: LoginService,
-    private _loadingController: LoadingController,
-    public alertController: AlertController,
-    public menuCtrl: MenuController,
-
+    private platform: Platform, private splashScreen: SplashScreen, private statusBar: StatusBar,
+    private _router: Router, private actionSheetCtrl: ActionSheetController,private loginService: LoginService,
+    public alertController: AlertController
     )  {
-    this.selectedIndex = 0;
-    
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
     this.initializeApp();
     
@@ -72,7 +62,6 @@ export class AppComponent implements OnInit {
     this.backButtonEvent();
   }
 
-  private loading;
   ngOnInit() {
     if(!this.userInfo){
       this._router.navigate(['/login']);
@@ -122,11 +111,34 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout(){
-    localStorage.removeItem('currentUser');
-    this.loginService.logout();
-    this._router.navigate(['login']);
+  logout(): void {
     this.selectedIndex = 0;
+    if(localStorage.getItem('fillAttendanceLog')) {
+      this.alert = this.alertController.create({
+        message: 'do you want to stop your attendence?',
+        buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            this.loginService.logout();
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.loginService.sendMessage('Message');
+            this.loginService.logout();
+          }
+        }
+        ]
+      }).then((alert) => {
+        alert.present();
+      });
+    }
+    else {
+      this.loginService.logout();
+    }    
   }
 }
 

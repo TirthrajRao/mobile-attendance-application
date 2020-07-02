@@ -90,8 +90,8 @@ export class LoginPage implements OnInit {
 			setTimeout(() => {
 				loading.dismiss();
 				this._loginService.loginUser(this.data).subscribe((response) => {
-					this._router.navigate(['/']);
 					console.log("successfull login"  , response);
+					this._router.navigate(['/']);
 					this.isDisable = false;
 					this.isError = false;
 					this.loginForm.reset();

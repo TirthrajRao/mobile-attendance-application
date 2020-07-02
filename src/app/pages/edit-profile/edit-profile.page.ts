@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { LogsService } from 'src/app/services/logs.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
-import { MenuController } from '@ionic/angular';
+import { Platform, ActionSheetController, IonRouterOutlet } from '@ionic/angular';
 import { LoginService } from 'src/app/services/login.service';
-import { HttpClient } from '@angular/common/http';
+import { ViewChildren, QueryList } from '@angular/core';
 
 @Component({
 	selector: 'app-edit-profile',
@@ -19,12 +19,24 @@ export class EditProfilePage implements OnInit {
 	userInfo:any;
 	show:boolean = false;
 	password:any;
-	userId:any;
-	message:any;
+	subscribe:any;
+	lastTimeBackPress = 0;
+	timePeriodToExit = 2000;
 
-	constructor(public _logsService: LogsService, public _router: Router, public _route: ActivatedRoute, public _fb: FormBuilder,
-		public _loginService: LoginService, private http: HttpClient, public menuctl: MenuController
+	@ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
+
+	constructor(public _logsService: LogsService, public _router: Router, public _route: ActivatedRoute,
+		public _fb: FormBuilder, public _loginService: LoginService, public platform: Platform, 
+		public actionSheetCtrl: ActionSheetController
 		) { 
+		this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
+			if (this.constructor.name == "EditProfilePage") {
+				if (window.confirm("do you want to exit app")) {
+					navigator["app"].exitApp();
+				}
+			}
+		})
+
 		this.userInfo = JSON.parse(localStorage.getItem('currentUser'));
 		this.editForm = new FormGroup({
 			userRole: new FormControl('', [Validators.required]),
@@ -80,5 +92,27 @@ export class EditProfilePage implements OnInit {
 		this.userInfo.password = this.passForm.value.confirmPassword;
 		this.edit = this.userInfo;
 		this.passForm.reset();
+	}
+
+	backButtonEvent() {
+		this.platform.backButton.subscribe(async () => {
+			try {
+				const element = await this.actionSheetCtrl.getTop();
+				if (element) {
+					element.dismiss();
+					return;
+				}
+			} catch (error) {
+			}
+			this.routerOutlets.forEach((outlet: IonRouterOutlet) => {
+				if (outlet && outlet.canGoBack()) {
+					outlet.pop();
+				} else if (this._router.url === 'EditProfilePage') {
+					if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
+						navigator['app'].exitApp(); 
+					}
+				}
+			});
+		});
 	}
 }

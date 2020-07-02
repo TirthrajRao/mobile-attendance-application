@@ -1,10 +1,15 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Platform, NavController,ActionSheetController, MenuController, ToastController, LoadingController, AlertController } from '@ionic/angular';
 import { of, pipe } from 'rxjs';
 import { map, timeout} from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import  { config } from '../config'; 
-import { Platform } from '@ionic/angular';
+import { DashboardPage } from 'src/app/pages/dashboard/dashboard.page';
+import { LogsSummaryPage } from 'src/app/pages/logs-summary/logs-summary.page';
+import { UserProfilePage } from 'src/app/pages/user-profile/user-profile.page';
+import { EditProfilePage } from 'src/app/pages/edit-profile/edit-profile.page';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,9 +17,15 @@ import { Platform } from '@ionic/angular';
 
 export class LoginService {
 	isLoggedIn: EventEmitter<any> = new EventEmitter<any>();
+	private subject = new Subject<any>();
+
+	private _UserMessage : BehaviorSubject<any>;
+	public _user : Observable<any>;
+
 	private currentUserSubject: BehaviorSubject<any>;
 	public currentUser: Observable<any>;
-	constructor(public _http: HttpClient, public platform: Platform) {
+
+	constructor(public _http: HttpClient, public platform: Platform, public alertController: AlertController, public _router: Router) {
 		this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')));
 		this.currentUser = this.currentUserSubject.asObservable();
 	}
@@ -41,8 +52,16 @@ export class LoginService {
 	}
 
 	logout() {
-		console.log("called");
 		localStorage.removeItem('currentUser');
 		this.currentUserSubject.next(null);	
+		this._router.navigate(['/login']);
+	}
+
+	sendMessage(message: string) {
+		this.subject.next({ text: message });
+	}
+
+	getMessage(): Observable<any> {
+		return this.subject.asObservable();
 	}
 }

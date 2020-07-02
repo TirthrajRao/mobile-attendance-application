@@ -35,7 +35,7 @@ export class LogsService {
     console.log(body);
     return this._http.post( config.baseApiUrl+"attendance/get-attendance-by-id" , body);	
   }
-  
+
   fillAttendance(){
     if (JSON.parse(localStorage.getItem('olddate')) == null) {
       this.body = {
@@ -53,7 +53,7 @@ export class LogsService {
         }
       }
     }
-    return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , this.body);	
+     return this._http.post( config.baseApiUrl+"attendance/fill-attendance" , this.body);	
   }
   
   getLastFiveDaysAttendance(id){

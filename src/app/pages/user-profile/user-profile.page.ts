@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {FormControl, Validators, FormGroup, FormBuilder} from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { LogsService } from 'src/app/services/logs.service';
 import { LoginService } from 'src/app/services/login.service';
-import { HttpClient } from '@angular/common/http';
-import { Platform, LoadingController, ToastController, MenuController } from '@ionic/angular';
-import { EditProfilePage } from 'src/app/pages/edit-profile/edit-profile.page';
-import * as moment from 'moment';
-declare var $:any;
-declare var Timeline:any
+import { ViewChildren, QueryList } from '@angular/core';
+import { Platform, IonRouterOutlet, ActionSheetController } from '@ionic/angular';
+
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.page.html',
@@ -16,17 +13,18 @@ declare var Timeline:any
 })
 
 export class UserProfilePage implements OnInit {
-  myForm:FormGroup;
   userInfo:any;
   password:any;
   edit:any = [];
   userId:any;
   show:boolean = false;
   allData:any = [];
-  data:any;
   skeleton:any;
   name: any;
   designation: any;
+  lastTimeBackPress = 0;
+  timePeriodToExit = 2000;
+  subscribe:any;
   allUser:any = {
     "branch": "",
     "designation": "",
@@ -36,19 +34,30 @@ export class UserProfilePage implements OnInit {
     "userRole": "",
   }
 
+  @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
+
   constructor(
     public _router: Router,
     public _route: ActivatedRoute,
-    public _fb: FormBuilder,
     public _loginService: LoginService,
-    private http: HttpClient,
     private _logService: LogsService,
-    private _loadingController: LoadingController,
-    public menuctl: MenuController,
+    public platform: Platform,
+    public actionSheetCtrl: ActionSheetController
     ) {
+
+    this.subscribe = this.platform.backButton.subscribeWithPriority(666666,() => {
+      if (this.constructor.name == "UserProfilePage") {
+        if (window.confirm("do you want to exit app")) {
+          navigator["app"].exitApp();
+        }
+      }
+    })
+
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'));
     this.edit = this.userInfo;
     this.userId = this.userInfo._id;
+
+    this.backButtonEvent();
   }
 
   ngOnInit() {
@@ -60,6 +69,28 @@ export class UserProfilePage implements OnInit {
       this.allData[0] = this.edit;
       this.name = this.edit.name;
       this.designation = this.edit.designation;
+    });
+  }
+
+  backButtonEvent() {
+    this.platform.backButton.subscribe(async () => {
+      try {
+        const element = await this.actionSheetCtrl.getTop();
+        if (element) {
+          element.dismiss();
+          return;
+        }
+      } catch (error) {
+      }
+      this.routerOutlets.forEach((outlet: IonRouterOutlet) => {
+        if (outlet && outlet.canGoBack()) {
+          outlet.pop();
+        } else if (this._router.url === 'UserProfilePage') {
+          if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
+            navigator['app'].exitApp(); 
+          }
+        }
+      });
     });
   }
 
